@@ -1,0 +1,47 @@
+{
+  "app": {
+    "scope": "dart",
+    "prefix": "app",
+    "body": ["import 'package:test_project/app/app.dart';"]
+  },
+
+  "core-domain": {
+    "scope": "dart",
+    "prefix": "core-domain",
+    "body": ["import 'package:test_project/core/domain/domain.dart';"]
+  },
+  "core-infrastructure": {
+    "scope": "dart",
+    "prefix": "core-infrastructure",
+    "body": [
+      "import 'package:test_project/core/infrastructure/infrastructure.dart';"
+    ]
+  },
+  "core-presentation": {
+    "scope": "dart",
+    "prefix": "core-presentation",
+    "body": [
+      "import 'package:test_project/core/presentation/presentation.dart';"
+    ]
+  },
+
+  "user-domain": {
+    "scope": "dart",
+    "prefix": "user-domain",
+    "body": ["import 'package:test_project/modules/user/domain/domain.dart';"]
+  },
+  "user-infrastructure": {
+    "scope": "dart",
+    "prefix": "user-infrastructure",
+    "body": [
+      "import 'package:test_project/modules/user/infrastructure/infrastructure.dart';"
+    ]
+  },
+  "user-presentation": {
+    "scope": "dart",
+    "prefix": "user-presentation",
+    "body": [
+      "import 'package:test_project/modules/user/presentation/presentation.dart';"
+    ]
+  }
+}
