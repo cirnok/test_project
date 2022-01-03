@@ -3,7 +3,7 @@ import 'package:test_project/modules/user/presentation/presentation.dart';
 
 class UserCubit extends Cubit<DataState<User>> {
   UserCubit(
-    this._repository,
+    this._userRepository,
     int userId, [
     User? user,
   ]) : super(const DataState.empty()) {
@@ -14,11 +14,11 @@ class UserCubit extends Cubit<DataState<User>> {
     }
   }
 
-  final UserRepository _repository;
+  final UserRepository _userRepository;
 
   Future<void> _getById(int id) async {
     return loadData(
-      () => _repository.getUserById(id),
+      () => _userRepository.getUserById(id),
     );
   }
 

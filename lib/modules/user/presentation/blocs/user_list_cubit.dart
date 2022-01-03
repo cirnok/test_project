@@ -2,15 +2,15 @@ import 'package:test_project/modules/user/domain/domain.dart';
 import 'package:test_project/modules/user/presentation/presentation.dart';
 
 class UserListCubit extends Cubit<DataState<List<User>>> {
-  UserListCubit(this._repository) : super(const DataState.empty()) {
+  UserListCubit(this._userRepository) : super(const DataState.empty()) {
     _getUsers();
   }
 
-  final UserRepository _repository;
+  final UserRepository _userRepository;
 
   Future<void> _getUsers() {
     return loadData(
-      () => _repository.getUsers(),
+      () => _userRepository.getUsers(),
     );
   }
 }

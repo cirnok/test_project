@@ -43,7 +43,8 @@ class UStateDecorator<T> extends StatelessWidget {
       return _ChildWithLoader<T>(dataState, builder);
     } else {
       final dataState = state as dynamic;
-      assert(dataState is DataStateLoaded || dataState is DataStateLoadingMore);
+      assert(
+          dataState is DataStateLoaded || dataState is DataStateSlientLoading);
 
       return builder(dataState.data, dataState.failure);
     }

@@ -9,8 +9,8 @@ extension DataHelpers<T> on Either<Failure, T> {
       (l) {
         if (oldState is DataStateLoading<T>) {
           return DataState<T>.loading(data: oldState.data);
-        } else if (oldState is DataStateLoadingMore<T>) {
-          return DataState<T>.loadingMore(data: oldState.data);
+        } else if (oldState is DataStateSlientLoading<T>) {
+          return DataState<T>.slientLoading(data: oldState.data);
         } else if (oldState is DataStateLoaded<T>) {
           return DataState<T>.loaded(data: oldState.data, failure: l);
         } else {

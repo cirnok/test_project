@@ -18,7 +18,7 @@ class DataState<T> with _$DataState {
     T? data,
   }) = DataStateLoading;
 
-  const factory DataState.loadingMore({
+  const factory DataState.slientLoading({
     required T? data,
-  }) = DataStateLoadingMore;
+  }) = DataStateSlientLoading;
 }

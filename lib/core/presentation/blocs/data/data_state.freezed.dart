@@ -36,8 +36,8 @@ class _$DataStateTearOff {
     );
   }
 
-  DataStateLoadingMore<T> loadingMore<T>({required T? data}) {
-    return DataStateLoadingMore<T>(
+  DataStateSlientLoading<T> slientLoading<T>({required T? data}) {
+    return DataStateSlientLoading<T>(
       data: data,
     );
   }
@@ -53,7 +53,7 @@ mixin _$DataState<T> {
     required TResult Function(Failure? failure) empty,
     required TResult Function(T data, Failure? failure) loaded,
     required TResult Function(T? data) loading,
-    required TResult Function(T? data) loadingMore,
+    required TResult Function(T? data) slientLoading,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -61,7 +61,7 @@ mixin _$DataState<T> {
     TResult Function(Failure? failure)? empty,
     TResult Function(T data, Failure? failure)? loaded,
     TResult Function(T? data)? loading,
-    TResult Function(T? data)? loadingMore,
+    TResult Function(T? data)? slientLoading,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -69,7 +69,7 @@ mixin _$DataState<T> {
     TResult Function(Failure? failure)? empty,
     TResult Function(T data, Failure? failure)? loaded,
     TResult Function(T? data)? loading,
-    TResult Function(T? data)? loadingMore,
+    TResult Function(T? data)? slientLoading,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -78,7 +78,7 @@ mixin _$DataState<T> {
     required TResult Function(DataStateEmpty<T> value) empty,
     required TResult Function(DataStateLoaded<T> value) loaded,
     required TResult Function(DataStateLoading<T> value) loading,
-    required TResult Function(DataStateLoadingMore<T> value) loadingMore,
+    required TResult Function(DataStateSlientLoading<T> value) slientLoading,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -86,7 +86,7 @@ mixin _$DataState<T> {
     TResult Function(DataStateEmpty<T> value)? empty,
     TResult Function(DataStateLoaded<T> value)? loaded,
     TResult Function(DataStateLoading<T> value)? loading,
-    TResult Function(DataStateLoadingMore<T> value)? loadingMore,
+    TResult Function(DataStateSlientLoading<T> value)? slientLoading,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -94,7 +94,7 @@ mixin _$DataState<T> {
     TResult Function(DataStateEmpty<T> value)? empty,
     TResult Function(DataStateLoaded<T> value)? loaded,
     TResult Function(DataStateLoading<T> value)? loading,
-    TResult Function(DataStateLoadingMore<T> value)? loadingMore,
+    TResult Function(DataStateSlientLoading<T> value)? slientLoading,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -184,7 +184,7 @@ class _$DataStateEmpty<T> implements DataStateEmpty<T> {
     required TResult Function(Failure? failure) empty,
     required TResult Function(T data, Failure? failure) loaded,
     required TResult Function(T? data) loading,
-    required TResult Function(T? data) loadingMore,
+    required TResult Function(T? data) slientLoading,
   }) {
     return empty(failure);
   }
@@ -195,7 +195,7 @@ class _$DataStateEmpty<T> implements DataStateEmpty<T> {
     TResult Function(Failure? failure)? empty,
     TResult Function(T data, Failure? failure)? loaded,
     TResult Function(T? data)? loading,
-    TResult Function(T? data)? loadingMore,
+    TResult Function(T? data)? slientLoading,
   }) {
     return empty?.call(failure);
   }
@@ -206,7 +206,7 @@ class _$DataStateEmpty<T> implements DataStateEmpty<T> {
     TResult Function(Failure? failure)? empty,
     TResult Function(T data, Failure? failure)? loaded,
     TResult Function(T? data)? loading,
-    TResult Function(T? data)? loadingMore,
+    TResult Function(T? data)? slientLoading,
     required TResult orElse(),
   }) {
     if (empty != null) {
@@ -221,7 +221,7 @@ class _$DataStateEmpty<T> implements DataStateEmpty<T> {
     required TResult Function(DataStateEmpty<T> value) empty,
     required TResult Function(DataStateLoaded<T> value) loaded,
     required TResult Function(DataStateLoading<T> value) loading,
-    required TResult Function(DataStateLoadingMore<T> value) loadingMore,
+    required TResult Function(DataStateSlientLoading<T> value) slientLoading,
   }) {
     return empty(this);
   }
@@ -232,7 +232,7 @@ class _$DataStateEmpty<T> implements DataStateEmpty<T> {
     TResult Function(DataStateEmpty<T> value)? empty,
     TResult Function(DataStateLoaded<T> value)? loaded,
     TResult Function(DataStateLoading<T> value)? loading,
-    TResult Function(DataStateLoadingMore<T> value)? loadingMore,
+    TResult Function(DataStateSlientLoading<T> value)? slientLoading,
   }) {
     return empty?.call(this);
   }
@@ -243,7 +243,7 @@ class _$DataStateEmpty<T> implements DataStateEmpty<T> {
     TResult Function(DataStateEmpty<T> value)? empty,
     TResult Function(DataStateLoaded<T> value)? loaded,
     TResult Function(DataStateLoading<T> value)? loading,
-    TResult Function(DataStateLoadingMore<T> value)? loadingMore,
+    TResult Function(DataStateSlientLoading<T> value)? slientLoading,
     required TResult orElse(),
   }) {
     if (empty != null) {
@@ -340,7 +340,7 @@ class _$DataStateLoaded<T> implements DataStateLoaded<T> {
     required TResult Function(Failure? failure) empty,
     required TResult Function(T data, Failure? failure) loaded,
     required TResult Function(T? data) loading,
-    required TResult Function(T? data) loadingMore,
+    required TResult Function(T? data) slientLoading,
   }) {
     return loaded(data, failure);
   }
@@ -351,7 +351,7 @@ class _$DataStateLoaded<T> implements DataStateLoaded<T> {
     TResult Function(Failure? failure)? empty,
     TResult Function(T data, Failure? failure)? loaded,
     TResult Function(T? data)? loading,
-    TResult Function(T? data)? loadingMore,
+    TResult Function(T? data)? slientLoading,
   }) {
     return loaded?.call(data, failure);
   }
@@ -362,7 +362,7 @@ class _$DataStateLoaded<T> implements DataStateLoaded<T> {
     TResult Function(Failure? failure)? empty,
     TResult Function(T data, Failure? failure)? loaded,
     TResult Function(T? data)? loading,
-    TResult Function(T? data)? loadingMore,
+    TResult Function(T? data)? slientLoading,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -377,7 +377,7 @@ class _$DataStateLoaded<T> implements DataStateLoaded<T> {
     required TResult Function(DataStateEmpty<T> value) empty,
     required TResult Function(DataStateLoaded<T> value) loaded,
     required TResult Function(DataStateLoading<T> value) loading,
-    required TResult Function(DataStateLoadingMore<T> value) loadingMore,
+    required TResult Function(DataStateSlientLoading<T> value) slientLoading,
   }) {
     return loaded(this);
   }
@@ -388,7 +388,7 @@ class _$DataStateLoaded<T> implements DataStateLoaded<T> {
     TResult Function(DataStateEmpty<T> value)? empty,
     TResult Function(DataStateLoaded<T> value)? loaded,
     TResult Function(DataStateLoading<T> value)? loading,
-    TResult Function(DataStateLoadingMore<T> value)? loadingMore,
+    TResult Function(DataStateSlientLoading<T> value)? slientLoading,
   }) {
     return loaded?.call(this);
   }
@@ -399,7 +399,7 @@ class _$DataStateLoaded<T> implements DataStateLoaded<T> {
     TResult Function(DataStateEmpty<T> value)? empty,
     TResult Function(DataStateLoaded<T> value)? loaded,
     TResult Function(DataStateLoading<T> value)? loading,
-    TResult Function(DataStateLoadingMore<T> value)? loadingMore,
+    TResult Function(DataStateSlientLoading<T> value)? slientLoading,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -488,7 +488,7 @@ class _$DataStateLoading<T> implements DataStateLoading<T> {
     required TResult Function(Failure? failure) empty,
     required TResult Function(T data, Failure? failure) loaded,
     required TResult Function(T? data) loading,
-    required TResult Function(T? data) loadingMore,
+    required TResult Function(T? data) slientLoading,
   }) {
     return loading(data);
   }
@@ -499,7 +499,7 @@ class _$DataStateLoading<T> implements DataStateLoading<T> {
     TResult Function(Failure? failure)? empty,
     TResult Function(T data, Failure? failure)? loaded,
     TResult Function(T? data)? loading,
-    TResult Function(T? data)? loadingMore,
+    TResult Function(T? data)? slientLoading,
   }) {
     return loading?.call(data);
   }
@@ -510,7 +510,7 @@ class _$DataStateLoading<T> implements DataStateLoading<T> {
     TResult Function(Failure? failure)? empty,
     TResult Function(T data, Failure? failure)? loaded,
     TResult Function(T? data)? loading,
-    TResult Function(T? data)? loadingMore,
+    TResult Function(T? data)? slientLoading,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -525,7 +525,7 @@ class _$DataStateLoading<T> implements DataStateLoading<T> {
     required TResult Function(DataStateEmpty<T> value) empty,
     required TResult Function(DataStateLoaded<T> value) loaded,
     required TResult Function(DataStateLoading<T> value) loading,
-    required TResult Function(DataStateLoadingMore<T> value) loadingMore,
+    required TResult Function(DataStateSlientLoading<T> value) slientLoading,
   }) {
     return loading(this);
   }
@@ -536,7 +536,7 @@ class _$DataStateLoading<T> implements DataStateLoading<T> {
     TResult Function(DataStateEmpty<T> value)? empty,
     TResult Function(DataStateLoaded<T> value)? loaded,
     TResult Function(DataStateLoading<T> value)? loading,
-    TResult Function(DataStateLoadingMore<T> value)? loadingMore,
+    TResult Function(DataStateSlientLoading<T> value)? slientLoading,
   }) {
     return loading?.call(this);
   }
@@ -547,7 +547,7 @@ class _$DataStateLoading<T> implements DataStateLoading<T> {
     TResult Function(DataStateEmpty<T> value)? empty,
     TResult Function(DataStateLoaded<T> value)? loaded,
     TResult Function(DataStateLoading<T> value)? loading,
-    TResult Function(DataStateLoadingMore<T> value)? loadingMore,
+    TResult Function(DataStateSlientLoading<T> value)? slientLoading,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -567,29 +567,30 @@ abstract class DataStateLoading<T> implements DataState<T> {
 }
 
 /// @nodoc
-abstract class $DataStateLoadingMoreCopyWith<T, $Res> {
-  factory $DataStateLoadingMoreCopyWith(DataStateLoadingMore<T> value,
-          $Res Function(DataStateLoadingMore<T>) then) =
-      _$DataStateLoadingMoreCopyWithImpl<T, $Res>;
+abstract class $DataStateSlientLoadingCopyWith<T, $Res> {
+  factory $DataStateSlientLoadingCopyWith(DataStateSlientLoading<T> value,
+          $Res Function(DataStateSlientLoading<T>) then) =
+      _$DataStateSlientLoadingCopyWithImpl<T, $Res>;
   $Res call({T? data});
 }
 
 /// @nodoc
-class _$DataStateLoadingMoreCopyWithImpl<T, $Res>
+class _$DataStateSlientLoadingCopyWithImpl<T, $Res>
     extends _$DataStateCopyWithImpl<T, $Res>
-    implements $DataStateLoadingMoreCopyWith<T, $Res> {
-  _$DataStateLoadingMoreCopyWithImpl(DataStateLoadingMore<T> _value,
-      $Res Function(DataStateLoadingMore<T>) _then)
-      : super(_value, (v) => _then(v as DataStateLoadingMore<T>));
+    implements $DataStateSlientLoadingCopyWith<T, $Res> {
+  _$DataStateSlientLoadingCopyWithImpl(DataStateSlientLoading<T> _value,
+      $Res Function(DataStateSlientLoading<T>) _then)
+      : super(_value, (v) => _then(v as DataStateSlientLoading<T>));
 
   @override
-  DataStateLoadingMore<T> get _value => super._value as DataStateLoadingMore<T>;
+  DataStateSlientLoading<T> get _value =>
+      super._value as DataStateSlientLoading<T>;
 
   @override
   $Res call({
     Object? data = freezed,
   }) {
-    return _then(DataStateLoadingMore<T>(
+    return _then(DataStateSlientLoading<T>(
       data: data == freezed
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
@@ -600,22 +601,22 @@ class _$DataStateLoadingMoreCopyWithImpl<T, $Res>
 
 /// @nodoc
 
-class _$DataStateLoadingMore<T> implements DataStateLoadingMore<T> {
-  const _$DataStateLoadingMore({required this.data});
+class _$DataStateSlientLoading<T> implements DataStateSlientLoading<T> {
+  const _$DataStateSlientLoading({required this.data});
 
   @override
   final T? data;
 
   @override
   String toString() {
-    return 'DataState<$T>.loadingMore(data: $data)';
+    return 'DataState<$T>.slientLoading(data: $data)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is DataStateLoadingMore<T> &&
+            other is DataStateSlientLoading<T> &&
             const DeepCollectionEquality().equals(other.data, data));
   }
 
@@ -625,8 +626,8 @@ class _$DataStateLoadingMore<T> implements DataStateLoadingMore<T> {
 
   @JsonKey(ignore: true)
   @override
-  $DataStateLoadingMoreCopyWith<T, DataStateLoadingMore<T>> get copyWith =>
-      _$DataStateLoadingMoreCopyWithImpl<T, DataStateLoadingMore<T>>(
+  $DataStateSlientLoadingCopyWith<T, DataStateSlientLoading<T>> get copyWith =>
+      _$DataStateSlientLoadingCopyWithImpl<T, DataStateSlientLoading<T>>(
           this, _$identity);
 
   @override
@@ -635,9 +636,9 @@ class _$DataStateLoadingMore<T> implements DataStateLoadingMore<T> {
     required TResult Function(Failure? failure) empty,
     required TResult Function(T data, Failure? failure) loaded,
     required TResult Function(T? data) loading,
-    required TResult Function(T? data) loadingMore,
+    required TResult Function(T? data) slientLoading,
   }) {
-    return loadingMore(data);
+    return slientLoading(data);
   }
 
   @override
@@ -646,9 +647,9 @@ class _$DataStateLoadingMore<T> implements DataStateLoadingMore<T> {
     TResult Function(Failure? failure)? empty,
     TResult Function(T data, Failure? failure)? loaded,
     TResult Function(T? data)? loading,
-    TResult Function(T? data)? loadingMore,
+    TResult Function(T? data)? slientLoading,
   }) {
-    return loadingMore?.call(data);
+    return slientLoading?.call(data);
   }
 
   @override
@@ -657,11 +658,11 @@ class _$DataStateLoadingMore<T> implements DataStateLoadingMore<T> {
     TResult Function(Failure? failure)? empty,
     TResult Function(T data, Failure? failure)? loaded,
     TResult Function(T? data)? loading,
-    TResult Function(T? data)? loadingMore,
+    TResult Function(T? data)? slientLoading,
     required TResult orElse(),
   }) {
-    if (loadingMore != null) {
-      return loadingMore(data);
+    if (slientLoading != null) {
+      return slientLoading(data);
     }
     return orElse();
   }
@@ -672,9 +673,9 @@ class _$DataStateLoadingMore<T> implements DataStateLoadingMore<T> {
     required TResult Function(DataStateEmpty<T> value) empty,
     required TResult Function(DataStateLoaded<T> value) loaded,
     required TResult Function(DataStateLoading<T> value) loading,
-    required TResult Function(DataStateLoadingMore<T> value) loadingMore,
+    required TResult Function(DataStateSlientLoading<T> value) slientLoading,
   }) {
-    return loadingMore(this);
+    return slientLoading(this);
   }
 
   @override
@@ -683,9 +684,9 @@ class _$DataStateLoadingMore<T> implements DataStateLoadingMore<T> {
     TResult Function(DataStateEmpty<T> value)? empty,
     TResult Function(DataStateLoaded<T> value)? loaded,
     TResult Function(DataStateLoading<T> value)? loading,
-    TResult Function(DataStateLoadingMore<T> value)? loadingMore,
+    TResult Function(DataStateSlientLoading<T> value)? slientLoading,
   }) {
-    return loadingMore?.call(this);
+    return slientLoading?.call(this);
   }
 
   @override
@@ -694,22 +695,22 @@ class _$DataStateLoadingMore<T> implements DataStateLoadingMore<T> {
     TResult Function(DataStateEmpty<T> value)? empty,
     TResult Function(DataStateLoaded<T> value)? loaded,
     TResult Function(DataStateLoading<T> value)? loading,
-    TResult Function(DataStateLoadingMore<T> value)? loadingMore,
+    TResult Function(DataStateSlientLoading<T> value)? slientLoading,
     required TResult orElse(),
   }) {
-    if (loadingMore != null) {
-      return loadingMore(this);
+    if (slientLoading != null) {
+      return slientLoading(this);
     }
     return orElse();
   }
 }
 
-abstract class DataStateLoadingMore<T> implements DataState<T> {
-  const factory DataStateLoadingMore({required T? data}) =
-      _$DataStateLoadingMore<T>;
+abstract class DataStateSlientLoading<T> implements DataState<T> {
+  const factory DataStateSlientLoading({required T? data}) =
+      _$DataStateSlientLoading<T>;
 
   T? get data;
   @JsonKey(ignore: true)
-  $DataStateLoadingMoreCopyWith<T, DataStateLoadingMore<T>> get copyWith =>
+  $DataStateSlientLoadingCopyWith<T, DataStateSlientLoading<T>> get copyWith =>
       throw _privateConstructorUsedError;
 }
