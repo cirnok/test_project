@@ -13,11 +13,6 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  pansy_ui:
-    git:
-      url: https://github.com/pansydev/pansy_libraries
-      path: packages/pansy_ui
-
   auto_route: ^3.2.0
   retrofit: ^3.0.1
   json_annotation: ^4.4.0
