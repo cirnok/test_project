@@ -1,24 +1,22 @@
 import 'package:test_project/core/presentation/presentation.dart';
 import 'package:test_project/modules/user/domain/domain.dart';
 
-class UBlocDecorator<B extends StateStreamable<DataState<S>>, S>
-    extends StatelessWidget {
-  const UBlocDecorator({
+class UProvidedStateDecorator<T> extends StatelessWidget {
+  const UProvidedStateDecorator({
     Key? key,
-    this.bloc,
+    required this.provider,
     required this.builder,
   }) : super(key: key);
 
-  final B? bloc;
-  final Widget Function(S data, Failure? failure) builder;
+  final ProviderListenable<DataState<T>> provider;
+  final Widget Function(T data, Failure? failure, WidgetRef ref) builder;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<B, DataState<S>>(
-      bloc: bloc,
-      builder: (context, state) => UStateDecorator(
-        state: state,
-        builder: builder,
+    return Consumer(
+      builder: (_, ref, __) => UStateDecorator<T>(
+        state: ref.watch(provider),
+        builder: (data, failure) => builder(data, failure, ref),
       ),
     );
   }
@@ -80,7 +78,7 @@ class _ChildWithLoader<T> extends StatelessWidget {
     return Stack(
       children: [
         if (state.data != null) builder(state.data!, null),
-        const Center(child: Text('loading')),
+        const Center(child: UPreloader()),
       ],
     );
   }

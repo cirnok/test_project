@@ -8,7 +8,10 @@ abstract class UserRestClient {
   factory UserRestClient(Dio dio) = _UserRestClient;
 
   @GET('/users')
-  Future<List<User>> getUsers();
+  Future<List<User>> getUsers({
+    @Query("_start") int? start,
+    @Query("_limit") int? limit,
+  });
 
   @GET('/users/{id}')
   Future<User> getUserById(@Path("id") int id);

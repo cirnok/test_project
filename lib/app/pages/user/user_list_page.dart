@@ -1,16 +1,8 @@
 import 'package:test_project/modules/user/domain/domain.dart';
 import 'package:test_project/modules/user/presentation/presentation.dart';
 
-class UserListPage extends StatelessWidget implements AutoRouteWrapper {
+class UserListPage extends StatelessWidget {
   const UserListPage({Key? key}) : super(key: key);
-
-  @override
-  Widget wrappedRoute(BuildContext context) {
-    return Provider(
-      create: (context) => UserListCubit(context.read<UserRepository>()),
-      child: this,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,14 +10,22 @@ class UserListPage extends StatelessWidget implements AutoRouteWrapper {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).users),
       ),
-      body: UBlocDecorator<UserListCubit, List<User>>(
-        builder: (data, failure) {
+      body: UProvidedStateDecorator<List<User>>(
+        provider: userListCubitProvider,
+        builder: (data, failure, ref) {
           return CustomScrollView(
             slivers: [
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (_, index) => _UserWidget(data[index]),
                   childCount: data.length,
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: TextButton(
+                  child: const Text('Load more'),
+                  onPressed: () =>
+                      ref.read(userListCubitProvider.notifier).loadMore(),
                 ),
               ),
             ],

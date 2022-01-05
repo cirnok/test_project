@@ -1,13 +1,24 @@
 import 'package:test_project/modules/user/domain/domain.dart';
 import 'package:test_project/modules/user/infrastructure/infrastructure.dart';
 
+final userRepositoryProvider = Provider<UserRepository>(
+  (ref) => UserRepositoryImpl(
+    UserRestClient(ref.read<Dio>(dioProvider)),
+  ),
+);
+
 class UserRepositoryImpl implements UserRepository {
   UserRepositoryImpl(this._client);
   final UserRestClient _client;
 
   @override
-  Future<Either<Failure, List<User>>> getUsers() {
-    return _client.getUsers().toEntity();
+  Future<Either<Failure, List<User>>> getUsers({Pagination? pagination}) {
+    return _client
+        .getUsers(
+          start: pagination?.start,
+          limit: pagination?.limit,
+        )
+        .toEntity();
   }
 
   @override

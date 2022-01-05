@@ -1,4 +1,3 @@
-export 'data_helpers.dart';
 import 'package:test_project/core/domain/domain.dart';
 
 part 'data_state.freezed.dart';
@@ -12,6 +11,7 @@ class DataState<T> with _$DataState {
   const factory DataState.loaded({
     required T data,
     Failure? failure,
+    Pagination? pagination,
   }) = DataStateLoaded;
 
   const factory DataState.loading({
@@ -20,5 +20,7 @@ class DataState<T> with _$DataState {
 
   const factory DataState.slientLoading({
     required T? data,
+    Failure? failure,
+    Pagination? pagination,
   }) = DataStateSlientLoading;
 }

@@ -8,12 +8,12 @@ part 'router.gr.dart';
   routes: <AutoRoute>[
     AutoRoute(
       page: UserListPage,
-      path: '/',
+      path: '/users/',
       initial: true,
     ),
     AutoRoute(
       page: UserPage,
-      path: '/user/:id',
+      path: '/users/:id',
     ),
   ],
 )

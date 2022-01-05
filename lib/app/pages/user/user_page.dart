@@ -1,7 +1,7 @@
 import 'package:test_project/modules/user/domain/domain.dart';
 import 'package:test_project/modules/user/presentation/presentation.dart';
 
-class UserPage extends StatelessWidget implements AutoRouteWrapper {
+class UserPage extends ConsumerWidget {
   const UserPage(
     @PathParam('id') this.userId, {
     Key? key,
@@ -12,37 +12,23 @@ class UserPage extends StatelessWidget implements AutoRouteWrapper {
   final User? user;
 
   @override
-  Widget wrappedRoute(BuildContext context) {
-    return Provider(
-      create: (context) => UserCubit(
-        context.read<UserRepository>(),
-        userId,
-        user,
-      ),
-      child: this,
-    );
-  }
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userCubit = ref.watch(userCubitProvider(userId));
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<UserCubit, DataState<User>>(
-      builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(_getTitle(context, state)),
-          ),
-          body: UStateDecorator<User>(
-            state: state,
-            builder: (data, _) => _UserContent(data),
-          ),
-        );
-      },
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(_getTitle(context, userCubit)),
+      ),
+      body: UStateDecorator<User>(
+        state: userCubit,
+        builder: (data, _) => _UserContent(data),
+      ),
     );
   }
 
   String _getTitle(BuildContext context, DataState<User> state) {
-    if (state is DataStateLoaded) {
-      final dataState = state as DataStateLoaded<User>;
+    if (state is DataStateLoaded || state is DataStateSlientLoading) {
+      final dataState = state as dynamic;
       return dataState.data.username;
     }
 
