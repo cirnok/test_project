@@ -20,7 +20,7 @@ class ApplicationPlaceholder extends StatelessWidget {
 }
 
 class Application extends StatelessWidget {
-  Application() : super(key: const Key("Application"));
+  Application({Key? key}) : super(key: key);
 
   final _router = AppRouter();
   final _supportedLocales = const [
