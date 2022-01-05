@@ -31,7 +31,7 @@ dart_code_metrics:
   metrics-exclude:
     - test/**
   rules:
-    - avoid-ignoring-return-values
+    #! - avoid-ignoring-return-values
     #  - avoid-late-keyword
     - avoid-missing-enum-constant-in-map
     - avoid-nested-conditional-expressions
