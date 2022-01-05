@@ -13,14 +13,14 @@ class UserPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userCubit = ref.watch(userCubitProvider(user ?? userId));
+    final userCubitState = ref.watch(userCubitProvider(user ?? userId));
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(_getTitle(context, userCubit)),
+        title: Text(_getTitle(context, userCubitState)),
       ),
       body: UStateDecorator<User>(
-        state: userCubit,
+        state: userCubitState,
         builder: (data, _) => _UserContent(data),
       ),
     );
