@@ -2,11 +2,17 @@ import 'package:test_project/modules/user/domain/domain.dart';
 import 'package:test_project/modules/user/infrastructure/infrastructure.dart';
 import 'package:test_project/modules/user/presentation/presentation.dart';
 
-final userCubitProvider = BlocProvider.family<UserCubit, DataState<User>, int>(
-  (ref, userId) => UserCubit(
-    ref.read<UserRepository>(userRepositoryProvider),
-    userId,
-  ),
+final userCubitProvider =
+    BlocProvider.family<UserCubit, DataState<User>, dynamic>(
+  (ref, user) {
+    assert(user is int || user is User);
+
+    return UserCubit(
+      ref.read<UserRepository>(userRepositoryProvider),
+      user is User ? user.id : user,
+      user is User ? user : null,
+    );
+  },
 );
 
 class UserCubit extends Cubit<DataState<User>> {

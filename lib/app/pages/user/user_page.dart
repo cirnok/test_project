@@ -13,7 +13,7 @@ class UserPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userCubit = ref.watch(userCubitProvider(userId));
+    final userCubit = ref.watch(userCubitProvider(user ?? userId));
 
     return Scaffold(
       appBar: AppBar(
