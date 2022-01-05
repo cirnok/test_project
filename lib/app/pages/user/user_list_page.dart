@@ -13,22 +13,13 @@ class UserListPage extends StatelessWidget {
       body: UProvidedStateDecorator<List<User>>(
         provider: userListCubitProvider,
         builder: (data, failure, ref) {
-          return CustomScrollView(
-            slivers: [
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (_, index) => _UserWidget(data[index]),
-                  childCount: data.length,
-                ),
-              ),
-              SliverToBoxAdapter(
-                child: TextButton(
-                  child: const Text('Load more'),
-                  onPressed: () =>
-                      ref.read(userListCubitProvider.notifier).loadMore(),
-                ),
-              ),
-            ],
+          return UPaginateListener(
+            onFetchRequest: () =>
+                ref.read(userListCubitProvider.notifier).loadMore(),
+            child: ListView.builder(
+              itemBuilder: (_, index) => _UserWidget(data[index]),
+              itemCount: data.length,
+            ),
           );
         },
       ),

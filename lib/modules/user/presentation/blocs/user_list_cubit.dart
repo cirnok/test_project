@@ -10,7 +10,7 @@ final userListCubitProvider =
 );
 
 class UserListCubit extends Cubit<DataState<List<User>>> {
-  final Pagination _pagination = const Pagination(limit: 3);
+  final Pagination _pagination = const Pagination();
 
   UserListCubit(this._userRepository) : super(const DataState.empty()) {
     reload();
