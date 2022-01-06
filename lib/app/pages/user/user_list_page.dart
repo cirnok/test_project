@@ -6,22 +6,20 @@ class UserListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context).users),
-      ),
+    return UScaffold(
+      heroTag: 'userListPage',
+      title: AppLocalizations.of(context).users,
       body: UProvidedStateDecorator<List<User>>(
         provider: userListCubitProvider,
-        builder: (data, failure, ref) {
-          return UPaginateListener(
-            onFetchRequest: () =>
-                ref.read(userListCubitProvider.notifier).loadMore(),
-            child: ListView.builder(
-              itemBuilder: (_, index) => _UserWidget(data[index]),
-              itemCount: data.length,
-            ),
-          );
-        },
+        builder: (data, failure, ref) => UPaginateListener(
+          onFetchRequest: () =>
+              ref.read(userListCubitProvider.notifier).loadMore(),
+          child: ListView.builder(
+            padding: EdgeInsets.zero,
+            itemBuilder: (_, index) => _UserWidget(data[index]),
+            itemCount: data.length,
+          ),
+        ),
       ),
     );
   }
@@ -38,12 +36,10 @@ class _UserWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: CircleAvatar(
-        child: Text(user.name.substring(0, 2)),
-      ),
+      leading: const UIconBox(FeatherIcons.user),
       title: Text(user.name),
-      subtitle: Text(user.username),
-      onTap: () => context.router.navigate(
+      subtitle: Text("@" + user.username),
+      onTap: () => context.navigateTo(
         UserRoute(userId: user.id, user: user),
       ),
     );

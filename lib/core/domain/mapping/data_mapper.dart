@@ -4,9 +4,10 @@ extension DataMapper<T> on Future<T> {
   Future<Either<Failure, T>> toEntity() async {
     try {
       return Right(await this);
-    } catch (e) {
-      //TODO
+    } on DioError {
       return Left(ServerFailure());
+    } catch (e) {
+      return Left(DomainFailure());
     }
   }
 }

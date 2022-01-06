@@ -43,5 +43,25 @@
     "body": [
       "import 'package:test_project/modules/user/presentation/presentation.dart';"
     ]
+  },
+
+  "photo-domain": {
+    "scope": "dart",
+    "prefix": "photo-domain",
+    "body": ["import 'package:test_project/modules/photo/domain/domain.dart';"]
+  },
+  "photo-infrastructure": {
+    "scope": "dart",
+    "prefix": "photo-infrastructure",
+    "body": [
+      "import 'package:test_project/modules/photo/infrastructure/infrastructure.dart';"
+    ]
+  },
+  "photo-presentation": {
+    "scope": "dart",
+    "prefix": "photo-presentation",
+    "body": [
+      "import 'package:test_project/modules/photo/presentation/presentation.dart';"
+    ]
   }
 }

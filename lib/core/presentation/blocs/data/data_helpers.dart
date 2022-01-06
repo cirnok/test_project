@@ -73,7 +73,6 @@ extension DataCubitHelpers<T> on Cubit<DataState<T>> {
     }
   }
 
-  //TODO
   Future<void> loadDataMore(
     Future<Either<Failure, T>> Function(Pagination pagination) method, {
     void Function(T data)? onSuccess,

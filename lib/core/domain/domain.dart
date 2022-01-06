@@ -2,6 +2,7 @@
 
 library domain;
 
+export 'entities/domain_failure.dart';
 export 'entities/failure.dart';
 export 'entities/pagination.dart';
 export 'entities/server_failure.dart';

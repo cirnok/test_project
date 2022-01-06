@@ -7,3 +7,4 @@ export 'package:freezed_annotation/freezed_annotation.dart';
 export 'package:flutter_riverpod/flutter_riverpod.dart';
 export 'package:flutter/material.dart';
 export 'package:fpdart/fpdart.dart' hide id, State, Reader;
+export 'package:flutter_feather_icons/flutter_feather_icons.dart';
