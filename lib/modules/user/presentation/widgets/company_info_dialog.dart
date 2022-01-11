@@ -1,4 +1,4 @@
-import 'package:test_project/core/presentation/presentation.dart';
+import 'package:test_project/modules/user/presentation/presentation.dart';
 import 'package:test_project/modules/user/domain/domain.dart';
 
 class UCompanyInfoDialog extends StatelessWidget {
