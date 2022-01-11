@@ -1,5 +1,7 @@
 import 'package:test_project/modules/photo/domain/domain.dart';
 import 'package:test_project/modules/photo/presentation/presentation.dart';
+import 'package:test_project/modules/post/domain/domain.dart';
+import 'package:test_project/modules/post/presentation/presentation.dart';
 import 'package:test_project/modules/user/domain/domain.dart';
 import 'package:test_project/modules/user/presentation/presentation.dart';
 
@@ -21,6 +23,7 @@ class UserPage extends ConsumerWidget {
       backgroundColor: Colors.black,
       title: _getTitle(context, userCubitState),
       body: SingleChildScrollView(
+        padding: EdgeInsets.only(bottom: context.viewPadding.bottom),
         child: UStateDecorator<User>(
           state: userCubitState,
           builder: (data, _) => _UserContent(data),
@@ -35,7 +38,7 @@ class UserPage extends ConsumerWidget {
       return "@" + dataState.data.username;
     }
 
-    return AppLocalizations.of(context).profile;
+    return context.localization.profile;
   }
 }
 
@@ -73,7 +76,7 @@ class _UserHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return UBlock(
+    return UCard(
       color: Colors.black,
       padding: const EdgeInsets.all(40),
       child: Column(
@@ -88,9 +91,7 @@ class _UserHeader extends StatelessWidget {
           const SizedBox(height: 20),
           Text(
             user.name,
-            style: Theme.of(context)
-                .textTheme
-                .headline6!
+            style: context.theme.textTheme.headline6!
                 .copyWith(color: Colors.white),
           ),
         ],
@@ -111,34 +112,43 @@ class _UserInformation extends StatelessWidget {
   Widget build(BuildContext context) {
     return Hero(
       tag: 'userListPage',
-      child: UBlock(
+      child: UCard(
         padding: EdgeInsets.zero,
         child: Column(
           children: [
             ListTile(
               leading: const UIconBox(FeatherIcons.mail),
-              title: const Text('Email'),
+              title: Text(context.localization.email),
               subtitle: Text(user.email),
             ),
             ListTile(
               leading: const UIconBox(FeatherIcons.phone),
-              title: const Text('Phone'),
+              title: Text(context.localization.phone),
               subtitle: Text(user.phone),
             ),
             ListTile(
               leading: const UIconBox(FeatherIcons.globe),
-              title: const Text('Website'),
+              title: Text(context.localization.website),
               subtitle: Text(user.website),
+              trailing: const Icon(FeatherIcons.chevronRight),
+              onTap: () => launchUrl(user.website),
             ),
             ListTile(
               leading: const UIconBox(FeatherIcons.home),
-              title: const Text('Company'),
+              title: Text(context.localization.company),
               subtitle: Text(user.company.name),
+              trailing: const Icon(FeatherIcons.chevronRight),
+              onTap: () => UDialog.show(
+                context,
+                UCompanyInfoDialog(user.company),
+              ),
             ),
             ListTile(
               leading: const UIconBox(FeatherIcons.mapPin),
-              title: const Text('Address'),
-              subtitle: Text(user.address.city),
+              title: Text(context.localization.address),
+              subtitle: Text(formatAddress(user.address)),
+              trailing: const Icon(FeatherIcons.map),
+              onTap: () => launchMapsUrl(user.address.geo),
             ),
           ],
         ),
@@ -159,7 +169,7 @@ class _UserAlbums extends StatelessWidget {
   Widget build(BuildContext context) {
     return Hero(
       tag: "albumsPage",
-      child: UBlock(
+      child: UCard(
         padding: EdgeInsets.zero,
         child: UProvidedStateDecorator<List<Album>>(
           provider: albumListCubitProvider(user.id),
@@ -176,7 +186,7 @@ class _UserAlbums extends StatelessWidget {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   padding: EdgeInsets.zero,
-                  itemBuilder: (_, index) => AlbumWidget(data[index]),
+                  itemBuilder: (_, index) => UAlbumListItem(data[index]),
                   itemCount: data.length < 3 ? data.length : 3,
                 ),
               ],
@@ -200,10 +210,10 @@ class _UserPosts extends StatelessWidget {
   Widget build(BuildContext context) {
     return Hero(
       tag: "postsPage",
-      child: UBlock(
+      child: UCard(
         padding: EdgeInsets.zero,
-        child: UProvidedStateDecorator(
-          provider: albumListCubitProvider(user.id),
+        child: UProvidedStateDecorator<List<Post>>(
+          provider: postListCubitProvider(user.id),
           builder: (data, failure, ref) {
             return Column(
               children: [
@@ -211,7 +221,14 @@ class _UserPosts extends StatelessWidget {
                   title: const Text('Posts'),
                   trailing: const Icon(FeatherIcons.chevronRight),
                   onTap: () =>
-                      context.navigateTo(AlbumListRoute(userId: user.id)),
+                      context.navigateTo(PostListRoute(userId: user.id)),
+                ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: EdgeInsets.zero,
+                  itemBuilder: (_, index) => UPostListItem(data[index]),
+                  itemCount: data.length < 3 ? data.length : 3,
                 ),
               ],
             );

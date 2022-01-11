@@ -13,8 +13,10 @@ final albumListCubitProvider =
 class AlbumListCubit extends Cubit<DataState<List<Album>>> {
   final Pagination _pagination = const Pagination();
 
-  AlbumListCubit(this._albumRepository, this.userId)
-      : super(const DataState.empty()) {
+  AlbumListCubit(
+    this._albumRepository,
+    this.userId,
+  ) : super(const DataState.empty()) {
     reload();
   }
 

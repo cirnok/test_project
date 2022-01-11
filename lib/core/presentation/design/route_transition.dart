@@ -47,7 +47,7 @@ class RouteTransition {
         scale: scaleAnimation,
         child: SlideTransition(
           position: offsetAnimation,
-          child: UBlock(
+          child: UCard(
             color: Colors.transparent,
             padding: EdgeInsets.zero,
             child: child,

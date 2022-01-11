@@ -61,7 +61,7 @@ dart_code_metrics:
     - always-remove-listener
     - avoid-returning-widgets
     - avoid-unnecessary-setstate
-    - avoid-wrapping-in-padding
+    #!- avoid-wrapping-in-padding
     - prefer-const-border-radius
     - prefer-extracting-callbacks
     #!- prefer-single-widget-per-file

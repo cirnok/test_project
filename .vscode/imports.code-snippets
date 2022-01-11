@@ -63,5 +63,25 @@
     "body": [
       "import 'package:test_project/modules/photo/presentation/presentation.dart';"
     ]
+  },
+
+  "post-domain": {
+    "scope": "dart",
+    "prefix": "post-domain",
+    "body": ["import 'package:test_project/modules/post/domain/domain.dart';"]
+  },
+  "post-infrastructure": {
+    "scope": "dart",
+    "prefix": "post-infrastructure",
+    "body": [
+      "import 'package:test_project/modules/post/infrastructure/infrastructure.dart';"
+    ]
+  },
+  "post-presentation": {
+    "scope": "dart",
+    "prefix": "post-presentation",
+    "body": [
+      "import 'package:test_project/modules/post/presentation/presentation.dart';"
+    ]
   }
 }

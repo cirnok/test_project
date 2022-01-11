@@ -18,7 +18,7 @@ class AppLocalizations {
     'en': App(),
   };
 
-  App get localizations => supportLocales[locale.languageCode]!;
+  App get localization => supportLocales[locale.languageCode]!;
 }
 
 class _AppLocalizationsDelegate

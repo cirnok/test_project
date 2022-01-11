@@ -2,6 +2,8 @@ import 'package:test_project/modules/user/domain/domain.dart';
 import 'package:test_project/modules/user/presentation/presentation.dart';
 import 'package:test_project/modules/photo/domain/domain.dart';
 import 'package:test_project/modules/photo/presentation/presentation.dart';
+import 'package:test_project/modules/post/domain/domain.dart';
+import 'package:test_project/modules/post/presentation/presentation.dart';
 
 part 'router.gr.dart';
 
@@ -26,7 +28,19 @@ part 'router.gr.dart';
     ),
     AutoRoute(
       page: AlbumPage,
-      path: '/users/:userId/albums/:albumId',
+      path: '/albums/:albumId',
+    ),
+    AutoRoute(
+      page: PhotoListPage,
+      path: '/albums/:albumId/view',
+    ),
+    AutoRoute(
+      page: PostListPage,
+      path: '/users/:userId/posts',
+    ),
+    AutoRoute(
+      page: PostPage,
+      path: '/posts/:postId',
     ),
   ],
 )

@@ -17,7 +17,7 @@ class AlbumPage extends ConsumerWidget {
 
     return UScaffold(
       heroTag: 'albumsPage',
-      title: AppLocalizations.of(context).album,
+      title: context.localization.album,
       body: UStateDecorator<Album>(
         state: albumCubitState,
         builder: (data, _) => _AlbumContent(data),
@@ -45,17 +45,9 @@ class _AlbumContent extends ConsumerWidget {
           crossAxisSpacing: 0,
           mainAxisSpacing: 0,
         ),
-        itemBuilder: (_, index) => Padding(
-          padding: const EdgeInsets.all(20),
-          child: Material(
-            color: Colors.red,
-            borderRadius: const BorderRadius.all(Radius.circular(15)),
-            clipBehavior: Clip.antiAlias,
-            child: Image.network(
-              data[index].thumbnailUrl,
-              fit: BoxFit.fill,
-            ),
-          ),
+        itemBuilder: (_, index) => UPhotoListItem(
+          data[index],
+          index: index,
         ),
         itemCount: data.length,
       ),

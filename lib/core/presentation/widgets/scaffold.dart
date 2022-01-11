@@ -5,20 +5,22 @@ class UScaffold extends StatelessWidget {
     Key? key,
     required this.title,
     this.backgroundColor = Colors.white,
+    this.floatingActionButton,
     required this.body,
     this.heroTag,
   }) : super(key: key);
 
   final String title;
   final Color backgroundColor;
+  final Widget? floatingActionButton;
   final Widget body;
-  // ignore: no-object-declaration
-  final Object? heroTag;
+  final String? heroTag;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor,
+      floatingActionButton: floatingActionButton,
       appBar: AppBar(
         leading: Visibility(
           visible: context.router.canPopSelfOrChildren,
@@ -27,29 +29,25 @@ class UScaffold extends StatelessWidget {
             onPressed: () => context.popRoute(),
           ),
         ),
-        title: Text(
-          title,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        title: Text(title),
         centerTitle: true,
       ),
       body: SafeArea(
+        bottom: false,
         child: Container(
           color: Colors.black,
           child: heroTag != null
               ? Hero(
                   tag: heroTag!,
                   flightShuttleBuilder: customFlightShuttleBuilder,
-                  child: UBlock(
+                  child: UCard(
                     color: backgroundColor,
                     padding: EdgeInsets.zero,
                     borderRadius: DesignConstants.borderRadiusOnlyTop,
                     child: body,
                   ),
                 )
-              : UBlock(
+              : UCard(
                   color: backgroundColor,
                   padding: EdgeInsets.zero,
                   borderRadius: DesignConstants.borderRadiusOnlyTop,
@@ -72,7 +70,7 @@ class UScaffold extends StatelessWidget {
       final fromHero = fromHeroContext.widget as Hero;
       final toHero = toHeroContext.widget as Hero;
 
-      return UBlock(
+      return UCard(
         padding: EdgeInsets.zero,
         child: Stack(
           children: [
