@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:test_project/core/presentation/presentation.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -29,6 +30,7 @@ class Application extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    _setEdgeToEdgeUIMode();
     return MaterialApp.router(
       title: PresentationConstants.appName,
       localizationsDelegates: [
@@ -43,5 +45,12 @@ class Application extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: theme,
     );
+  }
+
+  void _setEdgeToEdgeUIMode() {
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(systemNavigationBarColor: Colors.transparent),
+    );
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
 }

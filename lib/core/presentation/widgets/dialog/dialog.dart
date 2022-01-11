@@ -38,7 +38,7 @@ class _UDialogWidgetBodyDecorator extends StatelessWidget {
       child: UCard(
         borderRadius: DesignConstants.borderRadiusOnlyTop,
         padding: DesignConstants.padding.copyWith(
-          bottom: context.viewPadding.bottom,
+          bottom: DesignConstants.padding.bottom + context.viewPadding.bottom,
         ),
         child: body,
       ),
