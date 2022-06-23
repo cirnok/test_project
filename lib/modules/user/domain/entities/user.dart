@@ -1,7 +1,4 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-
-import 'address.dart';
-import 'company.dart';
+import 'package:test_project/modules/user/domain/domain.dart';
 
 part 'user.freezed.dart';
 part 'user.g.dart';

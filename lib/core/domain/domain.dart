@@ -2,6 +2,9 @@
 
 library domain;
 
+export 'converters/string_to_double.dart';
+export 'converters/string_to_int.dart';
+export 'converters/string_to_num.dart';
 export 'entities/domain_failure.dart';
 export 'entities/failure.dart';
 export 'entities/pagination.dart';

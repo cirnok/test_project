@@ -1,9 +1,9 @@
-import 'package:test_project/constants.dart';
 import 'package:test_project/modules/post/domain/domain.dart';
+import 'package:test_project/modules/post/infrastructure/infrastructure.dart';
 
 part 'comment_rest_client.g.dart';
 
-@RestApi(baseUrl: AppConstants.apiUrl)
+@RestApi(baseUrl: CoreInfrastructureConstants.apiUrl)
 abstract class CommentRestClient {
   factory CommentRestClient(Dio dio) = _CommentRestClient;
 

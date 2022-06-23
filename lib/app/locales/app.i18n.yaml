@@ -21,4 +21,6 @@ createComment: "Create comment"
 name: "Name"
 writeText: "Write text..."
 send: "Send"
-invalid(String text): "Invalid $text"
+
+requiredInput: "Required input"
+invalidEmail: "Invalid e-mail"

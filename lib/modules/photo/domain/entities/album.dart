@@ -1,4 +1,4 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:test_project/modules/photo/domain/domain.dart';
 
 part 'album.freezed.dart';
 part 'album.g.dart';

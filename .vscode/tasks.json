@@ -14,7 +14,7 @@
     },
     {
       "label": "Generate code",
-      "command": "flutter pub run index_generator && flutter pub run build_runner build --delete-conflicting-outputs",
+      "command": "flutter pub run index_generator && flutter pub run build_runner build --delete-conflicting-outputs && flutter pub run index_generator",
       "type": "shell",
       "args": [],
       "presentation": {

@@ -8,19 +8,21 @@ class AlbumPage extends ConsumerWidget {
     this.album,
   }) : super(key: key);
 
-  final int albumId;
+  final int? albumId;
   final Album? album;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final albumCubitState = ref.watch(albumCubitProvider(album ?? albumId));
+    final provider = albumViewModelProvider(
+      ModelValue(id: albumId, cachedModel: album),
+    );
 
     return UScaffold(
       heroTag: 'albumsPage',
       title: context.localization.album,
-      body: UStateDecorator<Album>(
-        state: albumCubitState,
-        builder: (data, _) => _AlbumContent(data),
+      body: UProvidedStateDecorator<Album>(
+        provider: provider,
+        builder: (data, _, __) => _AlbumContent(data),
       ),
     );
   }
@@ -37,7 +39,7 @@ class _AlbumContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return UStateDecorator<List<Photo>>(
-      state: ref.watch(photoListCubitProvider(album.id)),
+      state: ref.watch(photoListViewModelProvider(album.id)),
       builder: (data, _) => GridView.builder(
         padding: EdgeInsets.zero,
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(

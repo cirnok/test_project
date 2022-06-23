@@ -24,9 +24,6 @@ class Application extends StatelessWidget {
   Application({Key? key}) : super(key: key);
 
   final _router = AppRouter();
-  final _supportedLocales = const [
-    Locale('en'),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +36,7 @@ class Application extends StatelessWidget {
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
-      supportedLocales: _supportedLocales,
+      supportedLocales: AppLocalizations.supportedLocales,
       routerDelegate: _router.delegate(),
       routeInformationParser: _router.defaultRouteParser(),
       debugShowCheckedModeBanner: false,

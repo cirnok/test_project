@@ -2,32 +2,33 @@ import 'package:test_project/modules/post/domain/domain.dart';
 import 'package:test_project/modules/post/infrastructure/infrastructure.dart';
 import 'package:test_project/modules/post/presentation/presentation.dart';
 
-final commentListCubitProvider =
-    BlocProvider.family<CommentListCubit, DataState<List<Comment>>, int>(
-  (ref, postId) => CommentListCubit(
+final commentListViewModelProvider =
+    MultiDataViewModelProviderFamily<CommentListViewModel, Comment, int>(
+  (ref, postId) => CommentListViewModel(
     ref.read<CommentRepository>(commentRepositoryProvider),
     postId,
   ),
 );
 
-class CommentListCubit extends Cubit<DataState<List<Comment>>> {
-  final Pagination _pagination = const Pagination();
+const Pagination _pagination = Pagination();
 
-  CommentListCubit(this._commentRepository, this.postId)
-      : super(const DataState.empty()) {
-    reload();
-  }
+class CommentListViewModel extends MultiDataViewModel<Comment> {
+  CommentListViewModel(
+    this._commentRepository,
+    this.postId,
+  );
 
   final CommentRepository _commentRepository;
   final int postId;
 
+  @override
   Future<void> reload() {
     return loadData(
       () => _commentRepository.getComments(postId, pagination: _pagination),
-      pagination: _pagination,
     );
   }
 
+  @override
   Future<void> loadMore() {
     return loadDataMore(
       (pagination) =>
@@ -36,12 +37,10 @@ class CommentListCubit extends Cubit<DataState<List<Comment>>> {
   }
 
   void addCommentFromMemory(Comment comment) {
-    if (state is DataStateLoaded) {
-      emit(
-        DataState<List<Comment>>.loaded(
-          data: [comment] + (state as DataStateLoaded<List<Comment>>).data,
-        ),
-      );
-    }
+    assert(state is DataStateLoaded);
+
+    state = DataState.loaded(
+      data: [comment, ...state.data!],
+    );
   }
 }

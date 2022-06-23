@@ -1,7 +1,7 @@
 import 'package:test_project/core/presentation/presentation.dart';
 import 'package:test_project/modules/user/domain/domain.dart';
 
-class UProvidedStateDecorator<T> extends StatelessWidget {
+class UProvidedStateDecorator<T> extends ConsumerWidget {
   const UProvidedStateDecorator({
     Key? key,
     required this.provider,
@@ -27,14 +27,28 @@ class UProvidedStateDecorator<T> extends StatelessWidget {
   final bool sliver;
 
   @override
-  Widget build(BuildContext context) {
-    return Consumer(
-      builder: (_, ref, __) => UStateDecorator<T>(
-        state: ref.watch(provider),
-        builder: (data, failure) => builder(data, failure, ref),
-        sliver: sliver,
-      ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    return UStateDecorator<T>(
+      state: ref.watch(provider),
+      builder: (data, failure) => builder(data, failure, ref),
+      sliver: sliver,
     );
+  }
+}
+
+class UProvidedBuilder<T> extends ConsumerWidget {
+  const UProvidedBuilder({
+    Key? key,
+    required this.provider,
+    required this.builder,
+  }) : super(key: key);
+
+  final ProviderListenable<DataState<T>> provider;
+  final Widget Function(DataState<T> data, WidgetRef ref) builder;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return builder(ref.watch(provider), ref);
   }
 }
 
@@ -67,17 +81,12 @@ class UStateDecorator<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget result;
 
-    if (state is DataStateEmpty) {
-      result = _Empty(state as DataStateEmpty);
-    } else if (state is DataStateLoading) {
-      final dataState = state as DataStateLoading<T>;
-      result = _ChildWithLoader<T>(dataState, builder);
+    if (state.isLoading) {
+      result = _ChildWithLoader<T>(state, builder);
+    } else if (state.isEmpty) {
+      result = _Empty(state);
     } else {
-      final dataState = state as dynamic;
-      assert(
-          dataState is DataStateLoaded || dataState is DataStateSlientLoading);
-
-      return builder(dataState.data, dataState.failure);
+      return builder(state.data as T, state.failure);
     }
 
     if (!sliver) {
@@ -94,7 +103,7 @@ class _Empty<T> extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final DataStateEmpty<T> state;
+  final DataState<T> state;
 
   @override
   Widget build(BuildContext context) {
@@ -114,14 +123,14 @@ class _ChildWithLoader<T> extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final DataStateLoading<T> state;
+  final DataState<T> state;
   final Widget Function(T data, Failure? failure) builder;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        if (state.data != null) builder(state.data!, null),
+        if (state.data != null) builder(state.data as T, null),
         const Center(
           child: Padding(
             padding: DesignConstants.padding,

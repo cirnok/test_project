@@ -1,4 +1,4 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:test_project/modules/user/domain/domain.dart';
 
 part 'geo.freezed.dart';
 part 'geo.g.dart';
@@ -6,8 +6,8 @@ part 'geo.g.dart';
 @freezed
 class Geo with _$Geo {
   factory Geo({
-    required String lat,
-    required String lng,
+    @StringToDoubleConverter() required double lat,
+    @StringToDoubleConverter() required double lng,
   }) = _Geo;
 
   factory Geo.fromJson(Map<String, dynamic> json) => _$GeoFromJson(json);

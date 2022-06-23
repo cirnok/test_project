@@ -2,18 +2,18 @@ import 'package:test_project/modules/post/domain/domain.dart';
 import 'package:test_project/modules/post/infrastructure/infrastructure.dart';
 import 'package:test_project/modules/post/presentation/presentation.dart';
 
-final commentFormCubitProvider =
-    BlocProvider.family<CommentFormCubit, CommentFormState, int>(
+final commentFormViewModelProvider =
+    StateNotifierProviderFamily<CommentFormViewModel, CommentFormState, int>(
   (ref, postId) {
-    return CommentFormCubit(
+    return CommentFormViewModel(
       ref.read<CommentRepository>(commentRepositoryProvider),
       postId,
     );
   },
 );
 
-class CommentFormCubit extends Cubit<CommentFormState> {
-  CommentFormCubit(
+class CommentFormViewModel extends StateNotifier<CommentFormState> {
+  CommentFormViewModel(
     this._commentRepository,
     int postId,
   ) : super(
@@ -26,12 +26,10 @@ class CommentFormCubit extends Cubit<CommentFormState> {
   final CommentRepository _commentRepository;
 
   Future<Comment?> sendComment() async {
-    if (state is CommentFormStateLoading) return Future(() => null);
-    emit(
-      CommentFormState.loading(
-        state.commentEditingController,
-        postId: state.postId,
-      ),
+    assert(state is! CommentFormStateLoading);
+    state = CommentFormState.loading(
+      state.commentEditingController,
+      postId: state.postId,
     );
 
     final response = await _commentRepository.createComment(
@@ -43,7 +41,7 @@ class CommentFormCubit extends Cubit<CommentFormState> {
       ),
     );
 
-    final newState = response.fold(
+    state = response.fold(
       (l) => CommentFormState.error(
         state.commentEditingController,
         postId: state.postId,
@@ -55,9 +53,10 @@ class CommentFormCubit extends Cubit<CommentFormState> {
       ),
     );
 
-    emit(newState);
-    if (newState is CommentFormStateInitial) {
+    if (state is CommentFormStateInitial) {
       return response.getRight().toNullable();
     }
+
+    return null;
   }
 }

@@ -21,7 +21,7 @@ class UPhotoListItem extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: () => context.navigateTo(
-            PhotoListRoute(
+            PhotoRoute(
               albumId: photo.albumId,
               tumbnailPhoto: photo,
               initialIndex: index,

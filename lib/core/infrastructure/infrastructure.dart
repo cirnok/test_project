@@ -2,6 +2,7 @@
 
 library infrastructure;
 
+export 'constants.dart';
 export 'exports.dart';
 export 'i18n.dart';
 export 'providers/dio.dart';

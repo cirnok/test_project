@@ -11,7 +11,8 @@ class PostListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = postListCubitProvider(userId);
+    final provider = postListViewModelProvider(userId);
+
     return UScaffold(
       heroTag: 'postsPage',
       title: context.localization.posts,

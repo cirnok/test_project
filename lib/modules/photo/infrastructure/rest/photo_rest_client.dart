@@ -1,9 +1,9 @@
-import 'package:test_project/constants.dart';
 import 'package:test_project/modules/photo/domain/domain.dart';
+import 'package:test_project/modules/photo/infrastructure/infrastructure.dart';
 
 part 'photo_rest_client.g.dart';
 
-@RestApi(baseUrl: AppConstants.apiUrl)
+@RestApi(baseUrl: CoreInfrastructureConstants.apiUrl)
 abstract class PhotoRestClient {
   factory PhotoRestClient(Dio dio) = _PhotoRestClient;
 

@@ -4,6 +4,7 @@ analyzer:
   errors:
     missing_required_param: warning
     missing_return: warning
+    invalid_annotation_target: ignore
 
   plugins:
     - dart_code_metrics
@@ -52,7 +53,7 @@ dart_code_metrics:
     #  - no-magic-number
     - no-object-declaration
     #  - prefer-conditional-expressions
-    - prefer-correct-identifier-length
+    #  - prefer-correct-identifier-length
     - prefer-correct-type-name
     - prefer-first
     - prefer-last
@@ -63,7 +64,7 @@ dart_code_metrics:
     - avoid-unnecessary-setstate
     #!- avoid-wrapping-in-padding
     - prefer-const-border-radius
-    - prefer-extracting-callbacks
+    # - prefer-extracting-callbacks
     #!- prefer-single-widget-per-file
     - prefer-intl-name
     - provide-correct-intl-args

@@ -2,36 +2,36 @@ import 'package:test_project/modules/post/domain/domain.dart';
 import 'package:test_project/modules/post/infrastructure/infrastructure.dart';
 import 'package:test_project/modules/post/presentation/presentation.dart';
 
-final postListCubitProvider =
-    BlocProvider.family<PostListCubit, DataState<List<Post>>, int>(
-  (ref, userId) => PostListCubit(
+final postListViewModelProvider =
+    MultiDataViewModelProviderFamily<PostListViewModel, Post, int>(
+  (ref, userId) => PostListViewModel(
     ref.read<PostRepository>(postRepositoryProvider),
     userId,
   ),
 );
 
-class PostListCubit extends Cubit<DataState<List<Post>>> {
-  final Pagination _pagination = const Pagination();
+const Pagination _pagination = Pagination();
 
-  PostListCubit(this._postRepository, this.userId)
-      : super(const DataState.empty()) {
-    reload();
-  }
+class PostListViewModel extends MultiDataViewModel<Post> {
+  PostListViewModel(
+    this._postRepository,
+    this.userId,
+  );
 
   final PostRepository _postRepository;
   final int userId;
 
+  @override
   Future<void> reload() {
     return loadData(
       () => _postRepository.getPosts(userId, pagination: _pagination),
-      pagination: _pagination,
     );
   }
 
+  @override
   Future<void> loadMore() {
     return loadDataMore(
-      (pagination) =>
-          _postRepository.getPosts(userId, pagination: pagination),
+      (pagination) => _postRepository.getPosts(userId, pagination: pagination),
     );
   }
 }

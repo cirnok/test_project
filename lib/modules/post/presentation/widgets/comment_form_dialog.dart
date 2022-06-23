@@ -15,9 +15,9 @@ class _CommentFormDialogState extends ConsumerState<CommentFormDialog> {
   @override
   Widget build(BuildContext context) {
     final createCommentFormState =
-        ref.watch(commentFormCubitProvider(widget.postId));
+        ref.watch(commentFormViewModelProvider(widget.postId));
     final createCommentFormCubit =
-        ref.read(commentFormCubitProvider(widget.postId).notifier);
+        ref.read(commentFormViewModelProvider(widget.postId).notifier);
 
     return Form(
       key: formKey,
@@ -27,34 +27,31 @@ class _CommentFormDialogState extends ConsumerState<CommentFormDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             UDialogTitle(context.localization.createComment),
-            Row(
-              children: [
-                Flexible(
-                  child: TextFormField(
-                    controller: createCommentFormState
-                        .commentEditingController.nameController,
-                    decoration: UInputDecoration(
-                      hintText: context.localization.name,
-                    ),
-                    validator: RequiredValidator(
-                      errorText: context.localization.invalid('name'),
-                    ),
-                  ),
+            TextFormField(
+              controller: createCommentFormState
+                  .commentEditingController.nameController,
+              decoration: UInputDecoration(
+                hintText: context.localization.name,
+              ),
+              validator: RequiredValidator(
+                errorText: context.localization.requiredInput,
+              ),
+            ),
+            const SizedBox(height: 10),
+            TextFormField(
+              controller: createCommentFormState
+                  .commentEditingController.emailController,
+              decoration: UInputDecoration(
+                hintText: context.localization.email,
+              ),
+              validator: MultiValidator([
+                RequiredValidator(
+                  errorText: context.localization.requiredInput,
                 ),
-                const SizedBox(width: 10),
-                Flexible(
-                  child: TextFormField(
-                    controller: createCommentFormState
-                        .commentEditingController.emailController,
-                    decoration: UInputDecoration(
-                      hintText: context.localization.email,
-                    ),
-                    validator: RequiredValidator(
-                      errorText: context.localization.invalid('e-mail'),
-                    ),
-                  ),
+                EmailValidator(
+                  errorText: context.localization.invalidEmail,
                 ),
-              ],
+              ]),
             ),
             const SizedBox(height: 10),
             TextFormField(
@@ -65,7 +62,7 @@ class _CommentFormDialogState extends ConsumerState<CommentFormDialog> {
               ),
               maxLines: 5,
               validator: RequiredValidator(
-                errorText: context.localization.invalid('text'),
+                errorText: context.localization.requiredInput,
               ),
             ),
             const SizedBox(height: 20),

@@ -3,7 +3,7 @@ import 'package:test_project/modules/post/presentation/presentation.dart';
 import 'package:test_project/modules/user/domain/domain.dart';
 import 'package:test_project/modules/user/presentation/presentation.dart';
 
-class PostPage extends ConsumerWidget {
+class PostPage extends StatelessWidget {
   const PostPage(
     @PathParam('postId') this.postId, {
     Key? key,
@@ -14,35 +14,46 @@ class PostPage extends ConsumerWidget {
   final Post? post;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final postCubitState = ref.watch(postCubitProvider(post ?? postId));
-
-    return UScaffold(
-      backgroundColor: Colors.black,
-      title: context.localization.post,
-      body: UStateDecorator<Post>(
-        state: postCubitState,
-        builder: (data, _) => _PostContent(data),
+  Widget build(BuildContext context) {
+    final provider = postViewModelProvider(
+      ModelValue(
+        id: postId,
+        cachedModel: post,
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(
-          FeatherIcons.messageSquare,
-        ),
-        onPressed: () async {
-          final result = await UDialog.show(
-            context,
-            CommentFormDialog(
-              postId: post?.id ?? postId,
+    );
+
+    return UProvidedBuilder<Post>(
+      provider: provider,
+      builder: (state, ref) {
+        return UScaffold(
+          backgroundColor: Colors.black,
+          title: context.localization.post,
+          body: UStateDecorator<Post>(
+            state: state,
+            builder: (data, _) => _PostContent(data),
+          ),
+          floatingActionButton: FloatingActionButton(
+            child: const Icon(
+              FeatherIcons.messageSquare,
             ),
-          );
+            onPressed: () async {
+              final result = await UDialog.show(
+                context,
+                CommentFormDialog(
+                  postId: post?.id ?? postId,
+                ),
+              );
 
-          if (result != null) {
-            ref
-                .read(commentListCubitProvider(post?.id ?? postId).notifier)
-                .addCommentFromMemory(result);
-          }
-        },
-      ),
+              if (result != null) {
+                ref
+                    .read(commentListViewModelProvider(post?.id ?? postId)
+                        .notifier)
+                    .addCommentFromMemory(result);
+              }
+            },
+          ),
+        );
+      },
     );
   }
 }
@@ -58,7 +69,9 @@ class _PostContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return UProvidedStateDecorator<Post>(
-      provider: postCubitProvider(post),
+      provider: postViewModelProvider(
+        ModelValue(cachedModel: post),
+      ),
       builder: (data, _, __) => Column(
         children: [
           _PostHeader(post),
@@ -89,7 +102,9 @@ class _PostHeader extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             UProvidedStateDecorator<User>(
-              provider: userCubitProvider(post.userId),
+              provider: userViewModelProvider(
+                ModelValue(id: post.userId),
+              ),
               builder: (data, _, __) => UUserListItem(data),
             ),
             Padding(
@@ -135,7 +150,7 @@ class _CommentsList extends StatelessWidget {
       child: UCard(
         padding: EdgeInsets.zero,
         child: UProvidedStateDecorator<List<Comment>>(
-          provider: commentListCubitProvider(post.id),
+          provider: commentListViewModelProvider(post.id),
           builder: (data, _, __) => ListView.separated(
             padding: EdgeInsets.only(bottom: context.viewPadding.bottom),
             itemCount: data.length,

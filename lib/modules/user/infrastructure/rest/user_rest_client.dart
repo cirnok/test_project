@@ -1,9 +1,9 @@
-import 'package:test_project/constants.dart';
 import 'package:test_project/modules/user/domain/domain.dart';
+import 'package:test_project/modules/user/infrastructure/infrastructure.dart';
 
 part 'user_rest_client.g.dart';
 
-@RestApi(baseUrl: AppConstants.apiUrl)
+@RestApi(baseUrl: CoreInfrastructureConstants.apiUrl)
 abstract class UserRestClient {
   factory UserRestClient(Dio dio) = _UserRestClient;
 

@@ -1,4 +1,4 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:test_project/modules/post/domain/domain.dart';
 
 part 'comment.freezed.dart';
 part 'comment.g.dart';

@@ -11,7 +11,8 @@ class AlbumListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = albumListCubitProvider(userId);
+    final provider = albumListViewModelProvider(userId);
+
     return UScaffold(
       heroTag: 'albumsPage',
       title: context.localization.albums,

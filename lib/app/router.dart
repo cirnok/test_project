@@ -31,7 +31,7 @@ part 'router.gr.dart';
       path: '/albums/:albumId',
     ),
     AutoRoute(
-      page: PhotoListPage,
+      page: PhotoPage,
       path: '/albums/:albumId/view',
     ),
     AutoRoute(

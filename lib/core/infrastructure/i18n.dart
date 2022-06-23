@@ -16,7 +16,11 @@ class AppLocalizations {
 
   static const supportLocales = {
     'en': App(),
+    'ru': AppRu(),
   };
+
+  static List<Locale> supportedLocales =
+      supportLocales.keys.map((key) => Locale(key)).toList();
 
   App get localization => supportLocales[locale.languageCode]!;
 }

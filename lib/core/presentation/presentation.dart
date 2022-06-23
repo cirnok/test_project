@@ -2,8 +2,6 @@
 
 library presentation;
 
-export 'blocs/data/data_helpers.dart';
-export 'blocs/data/data_state.dart';
 export 'constants.dart';
 export 'design/constants.dart';
 export 'design/route_transition.dart';
@@ -16,6 +14,10 @@ export 'helpers/list_helpers.dart';
 export 'helpers/widget_helpers.dart';
 export 'theme/text_theme.dart';
 export 'theme/theme.dart';
+export 'viewmodels/data/data_model_value.dart';
+export 'viewmodels/data/data_provider.dart';
+export 'viewmodels/data/data_state.dart';
+export 'viewmodels/data/data_viewmodel.dart';
 export 'widgets/block.dart';
 export 'widgets/decorations/input_decoration.dart';
 export 'widgets/dialog/dialog.dart';

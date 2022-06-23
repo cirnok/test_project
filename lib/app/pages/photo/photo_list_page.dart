@@ -1,8 +1,8 @@
 import 'package:test_project/modules/photo/domain/domain.dart';
 import 'package:test_project/modules/photo/presentation/presentation.dart';
 
-class PhotoListPage extends ConsumerWidget {
-  const PhotoListPage(
+class PhotoPage extends ConsumerWidget {
+  const PhotoPage(
     @PathParam('albumId') this.albumId, {
     Key? key,
     this.tumbnailPhoto,
@@ -15,14 +15,14 @@ class PhotoListPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final photoListCubitState = ref.watch(photoListCubitProvider(albumId));
+    final provider = photoListViewModelProvider(albumId);
 
     return UScaffold(
       backgroundColor: Colors.black,
-      title: context.localization.photos,
-      body: UStateDecorator<List<Photo>>(
-        state: photoListCubitState,
-        builder: (data, _) => _PhotoListContent(
+      title: context.localization.photo,
+      body: UProvidedStateDecorator<List<Photo>>(
+        provider: provider,
+        builder: (data, _, __) => _PhotoContent(
           data,
           initialIndex,
         ),
@@ -31,8 +31,8 @@ class PhotoListPage extends ConsumerWidget {
   }
 }
 
-class _PhotoListContent extends ConsumerStatefulWidget {
-  const _PhotoListContent(
+class _PhotoContent extends ConsumerStatefulWidget {
+  const _PhotoContent(
     this.photos,
     this.initialIndex, {
     Key? key,
@@ -42,10 +42,10 @@ class _PhotoListContent extends ConsumerStatefulWidget {
   final int? initialIndex;
 
   @override
-  ConsumerState<_PhotoListContent> createState() => _PhotoListContentState();
+  ConsumerState<_PhotoContent> createState() => _PhotoContentState();
 }
 
-class _PhotoListContentState extends ConsumerState<_PhotoListContent> {
+class _PhotoContentState extends ConsumerState<_PhotoContent> {
   late int index;
   late PageController pageController;
 
@@ -58,7 +58,7 @@ class _PhotoListContentState extends ConsumerState<_PhotoListContent> {
   }
 
   void _pageUpdate(int value) {
-    setState(() => index = value + 1);
+    setState(() => index = value);
   }
 
   @override

@@ -5,7 +5,7 @@ import 'package:test_project/modules/post/presentation/presentation.dart';
 import 'package:test_project/modules/user/domain/domain.dart';
 import 'package:test_project/modules/user/presentation/presentation.dart';
 
-class UserPage extends ConsumerWidget {
+class UserPage extends StatelessWidget {
   const UserPage(
     @PathParam('userId') this.userId, {
     Key? key,
@@ -16,26 +16,35 @@ class UserPage extends ConsumerWidget {
   final User? user;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final userCubitState = ref.watch(userCubitProvider(user ?? userId));
-
-    return UScaffold(
-      backgroundColor: Colors.black,
-      title: _getTitle(context, userCubitState),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.only(bottom: context.viewPadding.bottom),
-        child: UStateDecorator<User>(
-          state: userCubitState,
-          builder: (data, _) => _UserContent(data),
-        ),
+  Widget build(BuildContext context) {
+    final provider = userViewModelProvider(
+      ModelValue(
+        id: userId,
+        cachedModel: user,
       ),
+    );
+
+    return UProvidedBuilder<User>(
+      provider: provider,
+      builder: (state, ref) {
+        return UScaffold(
+          backgroundColor: Colors.black,
+          title: _getTitle(context, state),
+          body: SingleChildScrollView(
+            padding: EdgeInsets.only(bottom: context.viewPadding.bottom),
+            child: UStateDecorator<User>(
+              state: state,
+              builder: (data, _) => _UserContent(data),
+            ),
+          ),
+        );
+      },
     );
   }
 
   String _getTitle(BuildContext context, DataState<User> state) {
-    if (state is DataStateLoaded || state is DataStateSlientLoading) {
-      final dataState = state as dynamic;
-      return "@" + dataState.data.username;
+    if (state.isNotEmpty) {
+      return "@${state.data!.username}";
     }
 
     return context.localization.profile;
@@ -172,12 +181,12 @@ class _UserAlbums extends StatelessWidget {
       child: UCard(
         padding: EdgeInsets.zero,
         child: UProvidedStateDecorator<List<Album>>(
-          provider: albumListCubitProvider(user.id),
+          provider: albumListViewModelProvider(user.id),
           builder: (data, failure, ref) {
             return Column(
               children: [
                 ListTile(
-                  title: const Text('Albums'),
+                  title: Text(context.localization.albums),
                   trailing: const Icon(FeatherIcons.chevronRight),
                   onTap: () =>
                       context.navigateTo(AlbumListRoute(userId: user.id)),
@@ -213,12 +222,12 @@ class _UserPosts extends StatelessWidget {
       child: UCard(
         padding: EdgeInsets.zero,
         child: UProvidedStateDecorator<List<Post>>(
-          provider: postListCubitProvider(user.id),
+          provider: postListViewModelProvider(user.id),
           builder: (data, failure, ref) {
             return Column(
               children: [
                 ListTile(
-                  title: const Text('Posts'),
+                  title: Text(context.localization.posts),
                   trailing: const Icon(FeatherIcons.chevronRight),
                   onTap: () =>
                       context.navigateTo(PostListRoute(userId: user.id)),

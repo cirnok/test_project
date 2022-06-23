@@ -10,10 +10,10 @@ class UserListPage extends StatelessWidget {
       heroTag: 'userListPage',
       title: context.localization.users,
       body: UProvidedStateDecorator<List<User>>(
-        provider: userListCubitProvider,
+        provider: userListViewModelProvider,
         builder: (data, failure, ref) => UPaginateListener(
           onFetchRequest: () =>
-              ref.read(userListCubitProvider.notifier).loadMore(),
+              ref.read(userListViewModelProvider.notifier).loadMore(),
           child: ListView.builder(
             padding: EdgeInsets.only(bottom: context.viewPadding.bottom),
             itemBuilder: (_, index) => UUserListItem(data[index]),
