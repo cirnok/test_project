@@ -1,6 +1,22 @@
 import 'package:test_project/core/presentation/presentation.dart';
 import 'package:test_project/modules/user/domain/domain.dart';
 
+class UProviderBuilder<T> extends ConsumerWidget {
+  const UProviderBuilder({
+    Key? key,
+    required this.provider,
+    required this.builder,
+  }) : super(key: key);
+
+  final ProviderListenable<DataState<T>> provider;
+  final Widget Function(DataState<T> data, WidgetRef ref) builder;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return builder(ref.watch(provider), ref);
+  }
+}
+
 class UProvidedStateDecorator<T> extends ConsumerWidget {
   const UProvidedStateDecorator({
     Key? key,
@@ -33,22 +49,6 @@ class UProvidedStateDecorator<T> extends ConsumerWidget {
       builder: (data, failure) => builder(data, failure, ref),
       sliver: sliver,
     );
-  }
-}
-
-class UProvidedBuilder<T> extends ConsumerWidget {
-  const UProvidedBuilder({
-    Key? key,
-    required this.provider,
-    required this.builder,
-  }) : super(key: key);
-
-  final ProviderListenable<DataState<T>> provider;
-  final Widget Function(DataState<T> data, WidgetRef ref) builder;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return builder(ref.watch(provider), ref);
   }
 }
 

@@ -22,7 +22,7 @@ class PostPage extends StatelessWidget {
       ),
     );
 
-    return UProvidedBuilder<Post>(
+    return UProviderBuilder<Post>(
       provider: provider,
       builder: (state, ref) {
         return UScaffold(

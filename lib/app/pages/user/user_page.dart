@@ -24,7 +24,7 @@ class UserPage extends StatelessWidget {
       ),
     );
 
-    return UProvidedBuilder<User>(
+    return UProviderBuilder<User>(
       provider: provider,
       builder: (state, ref) {
         return UScaffold(

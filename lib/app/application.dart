@@ -21,7 +21,8 @@ class ApplicationPlaceholder extends StatelessWidget {
 }
 
 class Application extends StatelessWidget {
-  Application({Key? key}) : super(key: key);
+  Application({Key? key, this.defaultLocale}) : super(key: key);
+  final Locale? defaultLocale;
 
   final _router = AppRouter();
 
@@ -40,6 +41,7 @@ class Application extends StatelessWidget {
       routerDelegate: _router.delegate(),
       routeInformationParser: _router.defaultRouteParser(),
       debugShowCheckedModeBanner: false,
+      locale: defaultLocale,
       theme: theme,
     );
   }
