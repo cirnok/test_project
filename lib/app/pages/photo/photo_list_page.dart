@@ -22,7 +22,7 @@ class PhotoPage extends ConsumerWidget {
       title: context.localization.photo,
       body: UProvidedStateDecorator<List<Photo>>(
         provider: provider,
-        builder: (data, _, __) => _PhotoContent(
+        builder: (data, _, __) => PhotoContent(
           data,
           initialIndex,
         ),
@@ -31,8 +31,9 @@ class PhotoPage extends ConsumerWidget {
   }
 }
 
-class _PhotoContent extends ConsumerStatefulWidget {
-  const _PhotoContent(
+@visibleForTesting
+class PhotoContent extends ConsumerStatefulWidget {
+  const PhotoContent(
     this.photos,
     this.initialIndex, {
     Key? key,
@@ -42,10 +43,10 @@ class _PhotoContent extends ConsumerStatefulWidget {
   final int? initialIndex;
 
   @override
-  ConsumerState<_PhotoContent> createState() => _PhotoContentState();
+  ConsumerState<PhotoContent> createState() => _PhotoContentState();
 }
 
-class _PhotoContentState extends ConsumerState<_PhotoContent> {
+class _PhotoContentState extends ConsumerState<PhotoContent> {
   late int index;
   late PageController pageController;
 

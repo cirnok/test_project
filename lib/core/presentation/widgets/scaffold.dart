@@ -39,7 +39,7 @@ class UScaffold extends StatelessWidget {
           child: heroTag != null
               ? Hero(
                   tag: heroTag!,
-                  flightShuttleBuilder: customFlightShuttleBuilder,
+                  flightShuttleBuilder: _customFlightShuttleBuilder,
                   child: UCard(
                     color: backgroundColor,
                     padding: EdgeInsets.zero,
@@ -59,7 +59,7 @@ class UScaffold extends StatelessWidget {
   }
 
   // ignore: long-parameter-list
-  Widget customFlightShuttleBuilder(
+  Widget _customFlightShuttleBuilder(
     _,
     animation,
     flightDirection,

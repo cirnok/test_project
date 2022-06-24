@@ -42,6 +42,8 @@ dev_dependencies:
   dart_code_metrics: ^4.8.1
   index_generator: ^3.0.0
   i18n: ^3.4.1
+  integration_test:
+    sdk: flutter
 
 index_generator:
   exclude:
