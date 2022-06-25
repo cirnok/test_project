@@ -1,14 +1,16 @@
 import 'package:test_project/modules/photo/domain/domain.dart';
-import 'package:test_project/modules/photo/infrastructure/infrastructure.dart';
 import 'package:test_project/modules/photo/presentation/presentation.dart';
 
-final albumViewModelProvider =
-    SingleDataViewModelProviderWithModelValue<AlbumViewModel, Album>(
-  (ref, value) => AlbumViewModel(
-    value,
-    ref.read<AlbumRepository>(albumRepositoryProvider),
-  ),
-);
+SingleDataViewModelProvider<Album, AlbumViewModel> createAlbumViewModelProvider(
+  ModelValue<Album> value,
+) {
+  return SingleDataViewModelProvider<Album, AlbumViewModel>(
+    (_, sp) => AlbumViewModel(
+      value,
+      sp.getRequired<AlbumRepository>(),
+    ),
+  );
+}
 
 class AlbumViewModel extends SingleDataViewModel<Album> {
   AlbumViewModel(

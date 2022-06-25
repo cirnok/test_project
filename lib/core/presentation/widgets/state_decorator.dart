@@ -1,23 +1,28 @@
 import 'package:test_project/core/presentation/presentation.dart';
 import 'package:test_project/modules/user/domain/domain.dart';
 
-class UProviderBuilder<T> extends ConsumerWidget {
+class UProviderBuilder<T> extends StatelessWidget {
   const UProviderBuilder({
     Key? key,
     required this.provider,
     required this.builder,
   }) : super(key: key);
 
-  final ProviderListenable<DataState<T>> provider;
-  final Widget Function(DataState<T> data, WidgetRef ref) builder;
+  final DataViewModelProvider<T> provider;
+  final Widget Function(BuildContext context, DataState<T> data) builder;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return builder(ref.watch(provider), ref);
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [provider],
+      child: BlocBuilder<DataViewModel<DataState<T>>, DataState<T>>(
+        builder: builder,
+      ),
+    );
   }
 }
 
-class UProvidedStateDecorator<T> extends ConsumerWidget {
+class UProvidedStateDecorator<T> extends StatelessWidget {
   const UProvidedStateDecorator({
     Key? key,
     required this.provider,
@@ -27,8 +32,9 @@ class UProvidedStateDecorator<T> extends ConsumerWidget {
 
   factory UProvidedStateDecorator.sliver({
     Key? key,
-    required ProviderListenable<DataState<T>> provider,
-    required Widget Function(T data, Failure? failure, WidgetRef ref) builder,
+    required DataViewModelProvider<T> provider,
+    required Widget Function(BuildContext context, T data, Failure? failure)
+        builder,
   }) {
     return UProvidedStateDecorator(
       key: key,
@@ -38,16 +44,21 @@ class UProvidedStateDecorator<T> extends ConsumerWidget {
     );
   }
 
-  final ProviderListenable<DataState<T>> provider;
-  final Widget Function(T data, Failure? failure, WidgetRef ref) builder;
+  final DataViewModelProvider<T> provider;
+  final Widget Function(BuildContext context, T data, Failure? failure) builder;
   final bool sliver;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return UStateDecorator<T>(
-      state: ref.watch(provider),
-      builder: (data, failure) => builder(data, failure, ref),
-      sliver: sliver,
+  Widget build(BuildContext context) {
+    return UProviderBuilder<T>(
+      provider: provider,
+      builder: ((context, data) {
+        return UStateDecorator<T>(
+          state: data,
+          builder: (data, failure) => builder(context, data, failure),
+          sliver: sliver,
+        );
+      }),
     );
   }
 }

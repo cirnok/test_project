@@ -15,7 +15,7 @@ class PostPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = postViewModelProvider(
+    final provider = createPostViewModelProvider(
       ModelValue(
         id: postId,
         cachedModel: post,
@@ -24,7 +24,7 @@ class PostPage extends StatelessWidget {
 
     return UProviderBuilder<Post>(
       provider: provider,
-      builder: (state, ref) {
+      builder: (context, state) {
         return UScaffold(
           backgroundColor: Colors.black,
           title: context.localization.post,
@@ -44,12 +44,14 @@ class PostPage extends StatelessWidget {
                 ),
               );
 
-              if (result != null) {
-                ref
-                    .read(commentListViewModelProvider(post?.id ?? postId)
-                        .notifier)
-                    .addCommentFromMemory(result);
-              }
+              // if (result != null) {
+              //   ref
+              //       .read(commentListViewModelProvider(post?.id ?? postId)
+              //           .notifier)
+              //       .addCommentFromMemory(result);
+              // }
+
+              //TODO: add comment to list
             },
           ),
         );
@@ -69,7 +71,7 @@ class _PostContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return UProvidedStateDecorator<Post>(
-      provider: postViewModelProvider(
+      provider: createPostViewModelProvider(
         ModelValue(cachedModel: post),
       ),
       builder: (data, _, __) => Column(
@@ -102,10 +104,10 @@ class _PostHeader extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             UProvidedStateDecorator<User>(
-              provider: userViewModelProvider(
+              provider: createUserViewModelProvider(
                 ModelValue(id: post.userId),
               ),
-              builder: (data, _, __) => UUserListItem(data),
+              builder: (_, data, __) => UUserListItem(data),
             ),
             Padding(
               padding: DesignConstants.padding.copyWith(top: 0),
@@ -150,8 +152,8 @@ class _CommentsList extends StatelessWidget {
       child: UCard(
         padding: EdgeInsets.zero,
         child: UProvidedStateDecorator<List<Comment>>(
-          provider: commentListViewModelProvider(post.id),
-          builder: (data, _, __) => ListView.separated(
+          provider: createCommentListViewModelProvider(post.id),
+          builder: (_, data, __) => ListView.separated(
             padding: EdgeInsets.only(bottom: context.viewPadding.bottom),
             itemCount: data.length,
             itemBuilder: (_, index) => UCommentListItem(data[index]),

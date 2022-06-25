@@ -17,7 +17,7 @@ class UserPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = userViewModelProvider(
+    final provider = createUserViewModelProvider(
       ModelValue(
         id: userId,
         cachedModel: user,
@@ -26,7 +26,7 @@ class UserPage extends StatelessWidget {
 
     return UProviderBuilder<User>(
       provider: provider,
-      builder: (state, ref) {
+      builder: (context, state) {
         return UScaffold(
           backgroundColor: Colors.black,
           title: _getTitle(context, state),
@@ -181,8 +181,8 @@ class _UserAlbums extends StatelessWidget {
       child: UCard(
         padding: EdgeInsets.zero,
         child: UProvidedStateDecorator<List<Album>>(
-          provider: albumListViewModelProvider(user.id),
-          builder: (data, failure, ref) {
+          provider: createAlbumListViewModelProvider(user.id),
+          builder: (context, data, failure) {
             return Column(
               children: [
                 ListTile(
@@ -222,8 +222,8 @@ class _UserPosts extends StatelessWidget {
       child: UCard(
         padding: EdgeInsets.zero,
         child: UProvidedStateDecorator<List<Post>>(
-          provider: postListViewModelProvider(user.id),
-          builder: (data, failure, ref) {
+          provider: createPostListViewModelProvider(user.id),
+          builder: (context, data, failure) {
             return Column(
               children: [
                 ListTile(

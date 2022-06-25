@@ -68,3 +68,4 @@ dart_code_metrics:
     #!- prefer-single-widget-per-file
     - prefer-intl-name
     - provide-correct-intl-args
+    - avoid-dynamic

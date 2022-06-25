@@ -3,7 +3,7 @@
 import 'package:test_project/core/presentation/presentation.dart';
 import 'package:test_project/core/domain/domain.dart';
 
-abstract class DataViewModel<T> extends StateNotifier<T> {
+abstract class DataViewModel<T> extends Cubit<T> {
   DataViewModel(super.state);
 
   Future<void> reload();
@@ -53,13 +53,13 @@ abstract class SingleDataViewModel<T> extends DataViewModel<DataState<T>> {
     void Function(Failure failure)? onFailure,
   ) async {
     if (_cache != null) {
-      state = DataState<T>.slientLoading(data: _cache as T);
+      emit(DataState<T>.slientLoading(data: _cache as T));
     } else {
-      state = DataState<T>.loading();
+      emit(DataState<T>.loading());
     }
 
     final response = await method;
-    state = response.fold(
+    emit(response.fold(
       (l) {
         return DataState<T>.loaded(
           data: state.data as T,
@@ -69,7 +69,7 @@ abstract class SingleDataViewModel<T> extends DataViewModel<DataState<T>> {
       (r) {
         return DataState<T>.loaded(data: r);
       },
-    );
+    ));
 
     if (response.isLeft() && onFailure != null) {
       final failure = response.getLeft().toNullable()!;
@@ -106,17 +106,17 @@ abstract class MultiDataViewModel<T> extends DataViewModel<DataState<List<T>>> {
     final oldState = state as DataStateLoaded<List<T>>;
     if (oldState.pagination == null) return Future(() => null);
 
-    state = DataState<List<T>>.slientLoading(
+    emit(DataState<List<T>>.slientLoading(
       data: oldState.data,
       pagination: oldState.pagination!,
-    );
+    ));
     final response = await method(oldState.pagination!.nextPage());
 
     final paginatedOldState = oldState.copyWith(
       pagination: oldState.pagination!.nextPage(),
     );
 
-    state = response.fold(
+    emit(response.fold(
       (l) {
         return DataState<List<T>>.loaded(
           data: oldState.data,
@@ -128,7 +128,7 @@ abstract class MultiDataViewModel<T> extends DataViewModel<DataState<List<T>>> {
           data: paginatedOldState.data..addAll(r),
         );
       },
-    );
+    ));
 
     if (response.isLeft() && onFailure != null) {
       final failure = response.getLeft().toNullable()!;
@@ -145,7 +145,7 @@ abstract class MultiDataViewModel<T> extends DataViewModel<DataState<List<T>>> {
     void Function(Failure failure)? onFailure,
   ) async {
     final response = await method;
-    state = response.fold(
+    emit(response.fold(
       (l) {
         if (state.isLoaded) {
           return DataState<List<T>>.loaded(
@@ -159,7 +159,7 @@ abstract class MultiDataViewModel<T> extends DataViewModel<DataState<List<T>>> {
       (r) {
         return DataState<List<T>>.loaded(data: r);
       },
-    );
+    ));
 
     if (response.isLeft() && onFailure != null) {
       final failure = response.getLeft().toNullable()!;

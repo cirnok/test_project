@@ -11,16 +11,16 @@ class PostListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = postListViewModelProvider(userId);
+    final provider = createPostListViewModelProvider(userId);
 
     return UScaffold(
       heroTag: 'postsPage',
       title: context.localization.posts,
       body: UProvidedStateDecorator<List<Post>>(
         provider: provider,
-        builder: (data, failure, ref) {
+        builder: (context, data, failure) {
           return UPaginateListener(
-            onFetchRequest: () => ref.read(provider.notifier).loadMore(),
+            onFetchRequest: () => context.read<PostListViewModel>().loadMore(),
             child: ListView.builder(
               padding: EdgeInsets.only(bottom: context.viewPadding.bottom),
               itemBuilder: (_, index) => UPostListItem(data[index]),

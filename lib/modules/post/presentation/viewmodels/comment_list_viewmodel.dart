@@ -1,14 +1,15 @@
 import 'package:test_project/modules/post/domain/domain.dart';
-import 'package:test_project/modules/post/infrastructure/infrastructure.dart';
 import 'package:test_project/modules/post/presentation/presentation.dart';
 
-final commentListViewModelProvider =
-    MultiDataViewModelProviderFamily<CommentListViewModel, Comment, int>(
-  (ref, postId) => CommentListViewModel(
-    ref.read<CommentRepository>(commentRepositoryProvider),
-    postId,
-  ),
-);
+MultiDataViewModelProvider<Comment, CommentListViewModel>
+    createCommentListViewModelProvider(int postId) {
+  return MultiDataViewModelProvider<Comment, CommentListViewModel>(
+    (_, sp) => CommentListViewModel(
+      sp.getRequired<CommentRepository>(),
+      postId,
+    ),
+  );
+}
 
 const Pagination _pagination = Pagination();
 
@@ -39,8 +40,8 @@ class CommentListViewModel extends MultiDataViewModel<Comment> {
   void addCommentFromMemory(Comment comment) {
     assert(state is DataStateLoaded);
 
-    state = DataState.loaded(
+    emit(DataState.loaded(
       data: [comment, ...state.data!],
-    );
+    ));
   }
 }

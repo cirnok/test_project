@@ -1,14 +1,16 @@
 import 'package:test_project/modules/user/domain/domain.dart';
-import 'package:test_project/modules/user/infrastructure/infrastructure.dart';
 import 'package:test_project/modules/user/presentation/presentation.dart';
 
-final userViewModelProvider =
-    SingleDataViewModelProviderWithModelValue<UserViewModel, User>(
-  (ref, value) => UserViewModel(
-    value,
-    ref.read<UserRepository>(userRepositoryProvider),
-  ),
-);
+SingleDataViewModelProvider<User, UserViewModel> createUserViewModelProvider(
+  ModelValue<User> value,
+) {
+  return SingleDataViewModelProvider<User, UserViewModel>(
+    (_, sp) => UserViewModel(
+      value,
+      sp.getRequired<UserRepository>(),
+    ),
+  );
+}
 
 class UserViewModel extends SingleDataViewModel<User> {
   UserViewModel(

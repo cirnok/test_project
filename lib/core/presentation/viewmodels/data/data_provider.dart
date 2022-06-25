@@ -1,36 +1,42 @@
 import 'package:test_project/core/presentation/presentation.dart';
-
 // ignore_for_file: subtype_of_sealed_class, prefer-correct-type-name
 
-class SingleDataViewModelProvider<S extends SingleDataViewModel<T>, T>
-    extends StateNotifierProvider<S, DataState<T>> {
-  SingleDataViewModelProvider(super.create);
+typedef DataViewModelProvider<T> = BlocProvider<DataViewModel<DataState<T>>>;
+
+typedef CreateDataViewModelCallback<T> = T Function(
+  BuildContext context,
+  ServiceProvider provider,
+);
+
+T _createDataViewModel<T>(
+  CreateDataViewModelCallback<T> create,
+  BuildContext context,
+) {
+  return create(context, context.read<ServiceProvider>());
 }
 
-class MultiDataViewModelProvider<S extends MultiDataViewModel<T>, T>
-    extends StateNotifierProvider<S, DataState<List<T>>> {
-  MultiDataViewModelProvider(super.create);
+class ViewModelProvider<T, VM extends BlocBase<T>> extends BlocProvider<VM> {
+  ViewModelProvider(
+    CreateDataViewModelCallback<VM> create, {
+    super.key,
+    super.child,
+  }) : super(create: (context) => _createDataViewModel(create, context));
 }
 
-class SingleDataViewModelProviderFamily<S extends SingleDataViewModel<A>, A, B>
-    extends StateNotifierProviderFamily<S, DataState<A>, B> {
-  SingleDataViewModelProviderFamily(
-    FamilyCreate<S, StateNotifierProviderRef<S, DataState<A>>, B> create,
-  ) : super(create);
+class SingleDataViewModelProvider<T, VM extends SingleDataViewModel<T>>
+    extends BlocProvider<VM> {
+  SingleDataViewModelProvider(
+    CreateDataViewModelCallback<VM> create, {
+    super.key,
+    super.child,
+  }) : super(create: (context) => _createDataViewModel(create, context));
 }
 
-class MultiDataViewModelProviderFamily<S extends MultiDataViewModel<A>, A, B>
-    extends StateNotifierProviderFamily<S, DataState<List<A>>, B> {
-  MultiDataViewModelProviderFamily(
-    FamilyCreate<S, StateNotifierProviderRef<S, DataState<List<A>>>, B> create,
-  ) : super(create);
-}
-
-class SingleDataViewModelProviderWithModelValue<
-    S extends SingleDataViewModel<T>,
-    T> extends StateNotifierProviderFamily<S, DataState<T>, ModelValue<T>> {
-  SingleDataViewModelProviderWithModelValue(
-    FamilyCreate<S, StateNotifierProviderRef<S, DataState<T>>, ModelValue<T>>
-        create,
-  ) : super(create);
+class MultiDataViewModelProvider<T, VM extends MultiDataViewModel<T>>
+    extends BlocProvider<VM> {
+  MultiDataViewModelProvider(
+    CreateDataViewModelCallback<VM> create, {
+    super.key,
+    super.child,
+  }) : super(create: (context) => _createDataViewModel(create, context));
 }

@@ -1,7 +1,7 @@
 import 'package:test_project/modules/photo/domain/domain.dart';
 import 'package:test_project/modules/photo/presentation/presentation.dart';
 
-class AlbumPage extends ConsumerWidget {
+class AlbumPage extends StatelessWidget {
   const AlbumPage(
     @PathParam('albumId') this.albumId, {
     Key? key,
@@ -12,8 +12,8 @@ class AlbumPage extends ConsumerWidget {
   final Album? album;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final provider = albumViewModelProvider(
+  Widget build(BuildContext context) {
+    final provider = createAlbumViewModelProvider(
       ModelValue(id: albumId, cachedModel: album),
     );
 
@@ -22,13 +22,13 @@ class AlbumPage extends ConsumerWidget {
       title: context.localization.album,
       body: UProvidedStateDecorator<Album>(
         provider: provider,
-        builder: (data, _, __) => _AlbumContent(data),
+        builder: (_, data, __) => _AlbumContent(data),
       ),
     );
   }
 }
 
-class _AlbumContent extends ConsumerWidget {
+class _AlbumContent extends StatelessWidget {
   const _AlbumContent(
     this.album, {
     Key? key,
@@ -37,10 +37,10 @@ class _AlbumContent extends ConsumerWidget {
   final Album album;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return UStateDecorator<List<Photo>>(
-      state: ref.watch(photoListViewModelProvider(album.id)),
-      builder: (data, _) => GridView.builder(
+  Widget build(BuildContext context) {
+    return UProvidedStateDecorator<List<Photo>>(
+      provider: createPhotoListViewModelProvider(album.id),
+      builder: (_, data, __) => GridView.builder(
         padding: EdgeInsets.zero,
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: 200,

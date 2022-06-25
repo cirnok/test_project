@@ -1,11 +1,10 @@
 import 'package:test_project/modules/user/domain/domain.dart';
-import 'package:test_project/modules/user/infrastructure/infrastructure.dart';
 import 'package:test_project/modules/user/presentation/presentation.dart';
 
 final userListViewModelProvider =
-    MultiDataViewModelProvider<UserListViewModel, User>(
-  (ref) => UserListViewModel(
-    ref.read<UserRepository>(userRepositoryProvider),
+    MultiDataViewModelProvider<User, UserListViewModel>(
+  (_, sp) => UserListViewModel(
+    sp.getRequired<UserRepository>(),
   ),
 );
 

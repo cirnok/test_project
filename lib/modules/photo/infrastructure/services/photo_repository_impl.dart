@@ -1,12 +1,6 @@
 import 'package:test_project/modules/photo/domain/domain.dart';
 import 'package:test_project/modules/photo/infrastructure/infrastructure.dart';
 
-final photoRepositoryProvider = Provider<PhotoRepository>(
-  (ref) => PhotoRepositoryImpl(
-    PhotoRestClient(ref.read<Dio>(dioProvider)),
-  ),
-);
-
 class PhotoRepositoryImpl implements PhotoRepository {
   PhotoRepositoryImpl(this._client);
   final PhotoRestClient _client;

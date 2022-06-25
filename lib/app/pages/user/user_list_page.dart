@@ -11,9 +11,8 @@ class UserListPage extends StatelessWidget {
       title: context.localization.users,
       body: UProvidedStateDecorator<List<User>>(
         provider: userListViewModelProvider,
-        builder: (data, failure, ref) => UPaginateListener(
-          onFetchRequest: () =>
-              ref.read(userListViewModelProvider.notifier).loadMore(),
+        builder: (context, data, failure) => UPaginateListener(
+          onFetchRequest: () => context.read<UserListViewModel>().loadMore(),
           child: ListView.builder(
             padding: EdgeInsets.only(bottom: context.viewPadding.bottom),
             itemBuilder: (_, index) => UUserListItem(data[index]),

@@ -1,14 +1,17 @@
 import 'package:test_project/modules/photo/domain/domain.dart';
-import 'package:test_project/modules/photo/infrastructure/infrastructure.dart';
 import 'package:test_project/modules/photo/presentation/presentation.dart';
 
-final albumListViewModelProvider =
-    MultiDataViewModelProviderFamily<AlbumListViewModel, Album, int>(
-  (ref, userId) => AlbumListViewModel(
-    ref.read<AlbumRepository>(albumRepositoryProvider),
-    userId,
-  ),
-);
+MultiDataViewModelProvider<Album, AlbumListViewModel>
+    createAlbumListViewModelProvider(
+  int userId,
+) {
+  return MultiDataViewModelProvider<Album, AlbumListViewModel>(
+    (_, sp) => AlbumListViewModel(
+      sp.getRequired<AlbumRepository>(),
+      userId,
+    ),
+  );
+}
 
 const Pagination _pagination = Pagination();
 
