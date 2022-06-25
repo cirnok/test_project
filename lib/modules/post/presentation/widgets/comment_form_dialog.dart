@@ -1,4 +1,3 @@
-import 'package:test_project/modules/post/domain/domain.dart';
 import 'package:test_project/modules/post/presentation/presentation.dart';
 
 class CommentFormDialog extends StatefulWidget {
@@ -15,11 +14,8 @@ class _CommentFormDialogState extends State<CommentFormDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<CommentFormState, CommentFormViewModel>(
-      (_, sp) => CommentFormViewModel(
-        sp.getRequired<CommentRepository>(),
-        widget.postId,
-      ),
+    return CommentFormViewModelProvider(
+      widget.postId,
       child: BlocBuilder<CommentFormViewModel, CommentFormState>(
           builder: (context, state) {
         final viewModel = context.read<CommentFormViewModel>();

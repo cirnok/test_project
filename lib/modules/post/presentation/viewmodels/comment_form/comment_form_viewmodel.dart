@@ -1,14 +1,18 @@
 import 'package:test_project/modules/post/domain/domain.dart';
 import 'package:test_project/modules/post/presentation/presentation.dart';
 
-ViewModelProvider<CommentFormState, CommentFormViewModel>
-    createCommentFormViewModelProvider(int postId) {
-  return ViewModelProvider<CommentFormState, CommentFormViewModel>(
-    (_, sp) => CommentFormViewModel(
-      sp.getRequired<CommentRepository>(),
-      postId,
-    ),
-  );
+class CommentFormViewModelProvider
+    extends SPBlocProvider<CommentFormViewModel> {
+  CommentFormViewModelProvider(
+    int postId, {
+    super.key,
+    super.child,
+  }) : super(
+          (_, sp) => CommentFormViewModel(
+            sp.getRequired<CommentRepository>(),
+            postId,
+          ),
+        );
 }
 
 class CommentFormViewModel extends Cubit<CommentFormState> {

@@ -1,12 +1,16 @@
 import 'package:test_project/modules/user/domain/domain.dart';
 import 'package:test_project/modules/user/presentation/presentation.dart';
 
-final userListViewModelProvider =
-    MultiDataViewModelProvider<User, UserListViewModel>(
-  (_, sp) => UserListViewModel(
-    sp.getRequired<UserRepository>(),
-  ),
-);
+class UserListViewModelProvider extends SPBlocProvider<UserListViewModel> {
+  UserListViewModelProvider({
+    super.key,
+    super.child,
+  }) : super(
+          (_, sp) => UserListViewModel(
+            sp.getRequired<UserRepository>(),
+          ),
+        );
+}
 
 const Pagination _pagination = Pagination();
 

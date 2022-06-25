@@ -1,7 +1,7 @@
 import 'package:test_project/modules/photo/domain/domain.dart';
 import 'package:test_project/modules/photo/presentation/presentation.dart';
 
-class PhotoPage extends StatelessWidget {
+class PhotoPage extends StatelessWidget with AutoRouteWrapper {
   const PhotoPage(
     @PathParam('albumId') this.albumId, {
     Key? key,
@@ -14,14 +14,19 @@ class PhotoPage extends StatelessWidget {
   final int? initialIndex;
 
   @override
-  Widget build(BuildContext context) {
-    final provider = createPhotoListViewModelProvider(albumId);
+  Widget wrappedRoute(BuildContext context) {
+    return PhotoListViewModelProvider(
+      albumId,
+      child: this,
+    );
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return UScaffold(
       backgroundColor: Colors.black,
       title: context.localization.photo,
-      body: UProvidedStateDecorator<List<Photo>>(
-        provider: provider,
+      body: UWrappedStateDecorator<PhotoListViewModel, List<Photo>>(
         builder: (_, data, __) => PhotoContent(
           data,
           initialIndex,

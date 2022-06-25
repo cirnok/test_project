@@ -1,27 +1,34 @@
 import 'package:test_project/modules/photo/domain/domain.dart';
 import 'package:test_project/modules/photo/presentation/presentation.dart';
 
-class AlbumPage extends StatelessWidget {
+class AlbumPage extends StatelessWidget with AutoRouteWrapper {
   const AlbumPage(
     @PathParam('albumId') this.albumId, {
     Key? key,
     this.album,
   }) : super(key: key);
 
-  final int? albumId;
+  final int albumId;
   final Album? album;
 
   @override
-  Widget build(BuildContext context) {
-    final provider = createAlbumViewModelProvider(
-      ModelValue(id: albumId, cachedModel: album),
+  Widget wrappedRoute(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        AlbumViewModelProvider(
+          ModelValue<Album>(id: albumId, cachedModel: album),
+        ),
+        PhotoListViewModelProvider(albumId),
+      ],
+      child: this,
     );
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return UScaffold(
-      heroTag: 'albumsPage',
       title: context.localization.album,
-      body: UProvidedStateDecorator<Album>(
-        provider: provider,
+      body: UWrappedStateDecorator<AlbumViewModel, Album>(
         builder: (_, data, __) => _AlbumContent(data),
       ),
     );
@@ -38,8 +45,7 @@ class _AlbumContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return UProvidedStateDecorator<List<Photo>>(
-      provider: createPhotoListViewModelProvider(album.id),
+    return UWrappedStateDecorator<PhotoListViewModel, List<Photo>>(
       builder: (_, data, __) => GridView.builder(
         padding: EdgeInsets.zero,
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(

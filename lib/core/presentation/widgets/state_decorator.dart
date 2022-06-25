@@ -1,62 +1,50 @@
 import 'package:test_project/core/presentation/presentation.dart';
-import 'package:test_project/modules/user/domain/domain.dart';
+import 'package:test_project/core/domain/domain.dart';
 
-class UProviderBuilder<T> extends StatelessWidget {
-  const UProviderBuilder({
-    Key? key,
-    required this.provider,
+class UDataStateViewModelBuilder<V extends DataViewModel<T>, T>
+    extends StatelessWidget {
+  const UDataStateViewModelBuilder({
+    super.key,
     required this.builder,
-  }) : super(key: key);
+  });
 
-  final DataViewModelProvider<T> provider;
-  final Widget Function(BuildContext context, DataState<T> data) builder;
+  final BlocWidgetBuilder<DataState<T>> builder;
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [provider],
-      child: BlocBuilder<DataViewModel<DataState<T>>, DataState<T>>(
-        builder: builder,
-      ),
+    return BlocBuilder<V, DataState<T>>(
+      builder: (context, state) => builder(context, state),
     );
   }
 }
 
-class UProvidedStateDecorator<T> extends StatelessWidget {
-  const UProvidedStateDecorator({
+class UWrappedStateDecorator<V extends DataViewModel<T>, T>
+    extends StatelessWidget {
+  const UWrappedStateDecorator({
     Key? key,
-    required this.provider,
     required this.builder,
-    this.sliver = false,
   }) : super(key: key);
 
-  factory UProvidedStateDecorator.sliver({
+  factory UWrappedStateDecorator.sliver({
     Key? key,
-    required DataViewModelProvider<T> provider,
     required Widget Function(BuildContext context, T data, Failure? failure)
         builder,
   }) {
-    return UProvidedStateDecorator(
+    return UWrappedStateDecorator(
       key: key,
-      provider: provider,
       builder: builder,
-      sliver: true,
     );
   }
 
-  final DataViewModelProvider<T> provider;
   final Widget Function(BuildContext context, T data, Failure? failure) builder;
-  final bool sliver;
 
   @override
   Widget build(BuildContext context) {
-    return UProviderBuilder<T>(
-      provider: provider,
+    return UDataStateViewModelBuilder<V, T>(
       builder: ((context, data) {
         return UStateDecorator<T>(
           state: data,
           builder: (data, failure) => builder(context, data, failure),
-          sliver: sliver,
         );
       }),
     );
@@ -68,7 +56,6 @@ class UStateDecorator<T> extends StatelessWidget {
     Key? key,
     required this.state,
     required this.builder,
-    this.sliver = false,
   }) : super(key: key);
 
   factory UStateDecorator.sliver({
@@ -80,13 +67,11 @@ class UStateDecorator<T> extends StatelessWidget {
       key: key,
       state: state,
       builder: builder,
-      sliver: true,
     );
   }
 
   final DataState<T> state;
   final Widget Function(T data, Failure? failure) builder;
-  final bool sliver;
 
   @override
   Widget build(BuildContext context) {
@@ -100,11 +85,7 @@ class UStateDecorator<T> extends StatelessWidget {
       return builder(state.data as T, state.failure);
     }
 
-    if (!sliver) {
-      return result;
-    } else {
-      return SliverToBoxAdapter(child: result);
-    }
+    return result;
   }
 }
 

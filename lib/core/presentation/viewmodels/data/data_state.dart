@@ -3,7 +3,7 @@ import 'package:test_project/core/domain/domain.dart';
 part 'data_state.freezed.dart';
 
 @freezed
-class DataState<T> with _$DataState {
+class DataState<T> with _$DataState<T> {
   const factory DataState.loading({variable}) = DataStateLoading;
 
   const factory DataState.error({

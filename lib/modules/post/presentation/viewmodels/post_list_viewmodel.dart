@@ -1,14 +1,17 @@
 import 'package:test_project/modules/post/domain/domain.dart';
 import 'package:test_project/modules/post/presentation/presentation.dart';
 
-MultiDataViewModelProvider<Post, PostListViewModel>
-    createPostListViewModelProvider(int userId) {
-  return MultiDataViewModelProvider<Post, PostListViewModel>(
-    (_, sp) => PostListViewModel(
-      sp.getRequired<PostRepository>(),
-      userId,
-    ),
-  );
+class PostListViewModelProvider extends SPBlocProvider<PostListViewModel> {
+  PostListViewModelProvider(
+    int userId, {
+    super.key,
+    super.child,
+  }) : super(
+          (_, sp) => PostListViewModel(
+            sp.getRequired<PostRepository>(),
+            userId,
+          ),
+        );
 }
 
 const Pagination _pagination = Pagination();

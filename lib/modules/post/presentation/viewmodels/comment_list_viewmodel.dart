@@ -1,14 +1,18 @@
 import 'package:test_project/modules/post/domain/domain.dart';
 import 'package:test_project/modules/post/presentation/presentation.dart';
 
-MultiDataViewModelProvider<Comment, CommentListViewModel>
-    createCommentListViewModelProvider(int postId) {
-  return MultiDataViewModelProvider<Comment, CommentListViewModel>(
-    (_, sp) => CommentListViewModel(
-      sp.getRequired<CommentRepository>(),
-      postId,
-    ),
-  );
+class CommentListViewModelProvider
+    extends SPBlocProvider<CommentListViewModel> {
+  CommentListViewModelProvider(
+    int postId, {
+    super.key,
+    super.child,
+  }) : super(
+          (_, sp) => CommentListViewModel(
+            sp.getRequired<CommentRepository>(),
+            postId,
+          ),
+        );
 }
 
 const Pagination _pagination = Pagination();

@@ -1,42 +1,29 @@
 import 'package:test_project/core/presentation/presentation.dart';
-// ignore_for_file: subtype_of_sealed_class, prefer-correct-type-name
 
-typedef DataViewModelProvider<T> = BlocProvider<DataViewModel<DataState<T>>>;
-
-typedef CreateDataViewModelCallback<T> = T Function(
+typedef CreateProviderCallback<T> = T Function(
   BuildContext context,
   ServiceProvider provider,
 );
 
-T _createDataViewModel<T>(
-  CreateDataViewModelCallback<T> create,
+T _createProvider<T>(
+  CreateProviderCallback<T> create,
   BuildContext context,
 ) {
   return create(context, context.read<ServiceProvider>());
 }
 
-class ViewModelProvider<T, VM extends BlocBase<T>> extends BlocProvider<VM> {
-  ViewModelProvider(
-    CreateDataViewModelCallback<VM> create, {
+class SPProvider<T> extends Provider<T> {
+  SPProvider(
+    CreateProviderCallback<T> create, {
     super.key,
     super.child,
-  }) : super(create: (context) => _createDataViewModel(create, context));
+  }) : super(create: (context) => _createProvider(create, context));
 }
 
-class SingleDataViewModelProvider<T, VM extends SingleDataViewModel<T>>
-    extends BlocProvider<VM> {
-  SingleDataViewModelProvider(
-    CreateDataViewModelCallback<VM> create, {
+class SPBlocProvider<T extends StateStreamableSource> extends BlocProvider<T> {
+  SPBlocProvider(
+    CreateProviderCallback<T> create, {
     super.key,
     super.child,
-  }) : super(create: (context) => _createDataViewModel(create, context));
-}
-
-class MultiDataViewModelProvider<T, VM extends MultiDataViewModel<T>>
-    extends BlocProvider<VM> {
-  MultiDataViewModelProvider(
-    CreateDataViewModelCallback<VM> create, {
-    super.key,
-    super.child,
-  }) : super(create: (context) => _createDataViewModel(create, context));
+  }) : super(create: (context) => _createProvider(create, context));
 }

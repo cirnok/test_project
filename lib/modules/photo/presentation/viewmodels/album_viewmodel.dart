@@ -1,21 +1,23 @@
 import 'package:test_project/modules/photo/domain/domain.dart';
 import 'package:test_project/modules/photo/presentation/presentation.dart';
 
-SingleDataViewModelProvider<Album, AlbumViewModel> createAlbumViewModelProvider(
-  ModelValue<Album> value,
-) {
-  return SingleDataViewModelProvider<Album, AlbumViewModel>(
-    (_, sp) => AlbumViewModel(
-      value,
-      sp.getRequired<AlbumRepository>(),
-    ),
-  );
+class AlbumViewModelProvider extends SPBlocProvider<AlbumViewModel> {
+  AlbumViewModelProvider(
+    ModelValue<Album> albumValue, {
+    super.key,
+    super.child,
+  }) : super(
+          (_, sp) => AlbumViewModel(
+            sp.getRequired<AlbumRepository>(),
+            albumValue,
+          ),
+        );
 }
 
 class AlbumViewModel extends SingleDataViewModel<Album> {
   AlbumViewModel(
-    ModelValue<Album> albumValue,
     this._albumRepository,
+    ModelValue<Album> albumValue,
   ) : super(albumValue);
 
   final AlbumRepository _albumRepository;

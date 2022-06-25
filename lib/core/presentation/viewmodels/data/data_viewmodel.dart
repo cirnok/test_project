@@ -3,13 +3,13 @@
 import 'package:test_project/core/presentation/presentation.dart';
 import 'package:test_project/core/domain/domain.dart';
 
-abstract class DataViewModel<T> extends Cubit<T> {
+abstract class DataViewModel<T> extends Cubit<DataState<T>> {
   DataViewModel(super.state);
 
   Future<void> reload();
 }
 
-abstract class SingleDataViewModel<T> extends DataViewModel<DataState<T>> {
+abstract class SingleDataViewModel<T> extends DataViewModel<T> {
   SingleDataViewModel(this.modelValue) : super(DataState<T>.loading()) {
     reload();
   }
@@ -81,7 +81,7 @@ abstract class SingleDataViewModel<T> extends DataViewModel<DataState<T>> {
   }
 }
 
-abstract class MultiDataViewModel<T> extends DataViewModel<DataState<List<T>>> {
+abstract class MultiDataViewModel<T> extends DataViewModel<List<T>> {
   MultiDataViewModel() : super(DataState<List<T>>.loading()) {
     reload();
   }

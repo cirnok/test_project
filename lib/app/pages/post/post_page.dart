@@ -3,7 +3,7 @@ import 'package:test_project/modules/post/presentation/presentation.dart';
 import 'package:test_project/modules/user/domain/domain.dart';
 import 'package:test_project/modules/user/presentation/presentation.dart';
 
-class PostPage extends StatelessWidget {
+class PostPage extends StatelessWidget with AutoRouteWrapper {
   const PostPage(
     @PathParam('postId') this.postId, {
     Key? key,
@@ -14,48 +14,40 @@ class PostPage extends StatelessWidget {
   final Post? post;
 
   @override
-  Widget build(BuildContext context) {
-    final provider = createPostViewModelProvider(
-      ModelValue(
-        id: postId,
-        cachedModel: post,
-      ),
+  Widget wrappedRoute(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        PostViewModelProvider(
+          ModelValue(id: postId, cachedModel: post),
+        ),
+        CommentListViewModelProvider(postId),
+      ],
+      child: this,
     );
+  }
 
-    return UProviderBuilder<Post>(
-      provider: provider,
-      builder: (context, state) {
-        return UScaffold(
-          backgroundColor: Colors.black,
-          title: context.localization.post,
-          body: UStateDecorator<Post>(
-            state: state,
-            builder: (data, _) => _PostContent(data),
-          ),
-          floatingActionButton: FloatingActionButton(
-            child: const Icon(
-              FeatherIcons.messageSquare,
+  @override
+  Widget build(BuildContext context) {
+    return UScaffold(
+      backgroundColor: Colors.black,
+      title: context.localization.post,
+      body: UWrappedStateDecorator<PostViewModel, Post>(
+        builder: (_, data, __) => _PostContent(data),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(FeatherIcons.messageSquare),
+        onPressed: () async {
+          await UDialog.show(
+            context,
+            CommentFormDialog(
+              postId: post?.id ?? postId,
             ),
-            onPressed: () async {
-              final result = await UDialog.show(
-                context,
-                CommentFormDialog(
-                  postId: post?.id ?? postId,
-                ),
-              );
-
-              // if (result != null) {
-              //   ref
-              //       .read(commentListViewModelProvider(post?.id ?? postId)
-              //           .notifier)
-              //       .addCommentFromMemory(result);
-              // }
-
-              //TODO: add comment to list
-            },
-          ),
-        );
-      },
+          ).then((value) {
+            if (value == null) return;
+            context.read<CommentListViewModel>().addCommentFromMemory(value);
+          });
+        },
+      ),
     );
   }
 }
@@ -70,17 +62,12 @@ class _PostContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return UProvidedStateDecorator<Post>(
-      provider: createPostViewModelProvider(
-        ModelValue(cachedModel: post),
-      ),
-      builder: (data, _, __) => Column(
-        children: [
-          _PostHeader(post),
-          const _CommentsListTitle(),
-          Expanded(child: _CommentsList(post)),
-        ],
-      ),
+    return Column(
+      children: [
+        _PostHeader(post),
+        const _CommentsListTitle(),
+        Expanded(child: _CommentsList(post)),
+      ],
     );
   }
 }
@@ -95,25 +82,25 @@ class _PostHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: UCard(
-        padding: EdgeInsets.zero,
-        borderRadius: DesignConstants.borderRadius,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            UProvidedStateDecorator<User>(
-              provider: createUserViewModelProvider(
-                ModelValue(id: post.userId),
+    return UserViewModelProvider(
+      ModelValue(id: post.userId),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: UCard(
+          padding: EdgeInsets.zero,
+          borderRadius: DesignConstants.borderRadius,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              UWrappedStateDecorator<UserViewModel, User>(
+                builder: (_, data, __) => UUserListItem(data),
               ),
-              builder: (_, data, __) => UUserListItem(data),
-            ),
-            Padding(
-              padding: DesignConstants.padding.copyWith(top: 0),
-              child: Text(post.body),
-            ),
-          ],
+              Padding(
+                padding: DesignConstants.padding.copyWith(top: 0),
+                child: Text(post.body),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -147,18 +134,14 @@ class _CommentsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Hero(
-      tag: 'postsPage',
-      child: UCard(
-        padding: EdgeInsets.zero,
-        child: UProvidedStateDecorator<List<Comment>>(
-          provider: createCommentListViewModelProvider(post.id),
-          builder: (_, data, __) => ListView.separated(
-            padding: EdgeInsets.only(bottom: context.viewPadding.bottom),
-            itemCount: data.length,
-            itemBuilder: (_, index) => UCommentListItem(data[index]),
-            separatorBuilder: (_, __) => const Divider(),
-          ),
+    return UCard(
+      padding: EdgeInsets.zero,
+      child: UWrappedStateDecorator<CommentListViewModel, List<Comment>>(
+        builder: (_, data, __) => ListView.separated(
+          padding: EdgeInsets.only(bottom: context.viewPadding.bottom),
+          itemCount: data.length,
+          itemBuilder: (_, index) => UCommentListItem(data[index]),
+          separatorBuilder: (_, __) => const Divider(),
         ),
       ),
     );

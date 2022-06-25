@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:test_project/core/infrastructure/infrastructure.dart';
 import 'package:test_project/core/presentation/presentation.dart';
+import 'package:test_project/main.dart';
 
 import '../helpers.dart';
 
@@ -12,12 +12,11 @@ void main() {
 }
 
 Future<void> initApplication(WidgetTester tester) async {
-  final pathProviderData = await initPathProvider();
+  final rootScope = await createServiceScope();
+
   await tester.pumpWidget(
-    ProviderScope(
-      overrides: [
-        pathProvider.overrideWithValue(pathProviderData),
-      ],
+    Provider(
+      create: (_) => rootScope.serviceProvider,
       child: Application(
         defaultLocale: const Locale('en'),
       ),
