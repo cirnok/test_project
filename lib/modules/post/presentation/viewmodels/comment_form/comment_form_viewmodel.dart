@@ -1,18 +1,21 @@
 import 'package:test_project/modules/post/domain/domain.dart';
-import 'package:test_project/modules/post/infrastructure/infrastructure.dart';
 import 'package:test_project/modules/post/presentation/presentation.dart';
 
-final commentFormViewModelProvider =
-    StateNotifierProviderFamily<CommentFormViewModel, CommentFormState, int>(
-  (ref, postId) {
-    return CommentFormViewModel(
-      ref.read<CommentRepository>(commentRepositoryProvider),
-      postId,
-    );
-  },
-);
+class CommentFormViewModelProvider
+    extends SPBlocProvider<CommentFormViewModel> {
+  CommentFormViewModelProvider(
+    int postId, {
+    super.key,
+    super.child,
+  }) : super(
+          (_, sp) => CommentFormViewModel(
+            sp.getRequired<CommentRepository>(),
+            postId,
+          ),
+        );
+}
 
-class CommentFormViewModel extends StateNotifier<CommentFormState> {
+class CommentFormViewModel extends Cubit<CommentFormState> {
   CommentFormViewModel(
     this._commentRepository,
     int postId,
@@ -27,10 +30,10 @@ class CommentFormViewModel extends StateNotifier<CommentFormState> {
 
   Future<Comment?> sendComment() async {
     assert(state is! CommentFormStateLoading);
-    state = CommentFormState.loading(
+    emit(CommentFormState.loading(
       state.commentEditingController,
       postId: state.postId,
-    );
+    ));
 
     final response = await _commentRepository.createComment(
       CreateCommentInput(
@@ -41,7 +44,7 @@ class CommentFormViewModel extends StateNotifier<CommentFormState> {
       ),
     );
 
-    state = response.fold(
+    emit(response.fold(
       (l) => CommentFormState.error(
         state.commentEditingController,
         postId: state.postId,
@@ -51,7 +54,7 @@ class CommentFormViewModel extends StateNotifier<CommentFormState> {
         state.commentEditingController..clear(),
         postId: state.postId,
       ),
-    );
+    ));
 
     if (state is CommentFormStateInitial) {
       return response.getRight().toNullable();

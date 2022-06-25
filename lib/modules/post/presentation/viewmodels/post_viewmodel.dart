@@ -1,19 +1,23 @@
 import 'package:test_project/modules/post/domain/domain.dart';
-import 'package:test_project/modules/post/infrastructure/infrastructure.dart';
 import 'package:test_project/modules/post/presentation/presentation.dart';
 
-final postViewModelProvider =
-    SingleDataViewModelProviderWithModelValue<PostViewModel, Post>(
-  (ref, value) => PostViewModel(
-    value,
-    ref.read<PostRepository>(postRepositoryProvider),
-  ),
-);
+class PostViewModelProvider extends SPBlocProvider<PostViewModel> {
+  PostViewModelProvider(
+    ModelValue<Post> postValue, {
+    super.key,
+    super.child,
+  }) : super(
+          (_, sp) => PostViewModel(
+            sp.getRequired<PostRepository>(),
+            postValue,
+          ),
+        );
+}
 
 class PostViewModel extends SingleDataViewModel<Post> {
   PostViewModel(
-    ModelValue<Post> postValue,
     this._postRepository,
+    ModelValue<Post> postValue,
   ) : super(postValue);
 
   final PostRepository _postRepository;

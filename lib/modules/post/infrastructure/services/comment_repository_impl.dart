@@ -1,12 +1,6 @@
 import 'package:test_project/modules/post/domain/domain.dart';
 import 'package:test_project/modules/post/infrastructure/infrastructure.dart';
 
-final commentRepositoryProvider = Provider<CommentRepository>(
-  (ref) => CommentRepositoryImpl(
-    CommentRestClient(ref.read<Dio>(dioProvider)),
-  ),
-);
-
 class CommentRepositoryImpl implements CommentRepository {
   CommentRepositoryImpl(this._client);
   final CommentRestClient _client;

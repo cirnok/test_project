@@ -1,36 +1,29 @@
 import 'package:test_project/core/presentation/presentation.dart';
 
-// ignore_for_file: subtype_of_sealed_class, prefer-correct-type-name
+typedef CreateProviderCallback<T> = T Function(
+  BuildContext context,
+  ServiceProvider provider,
+);
 
-class SingleDataViewModelProvider<S extends SingleDataViewModel<T>, T>
-    extends StateNotifierProvider<S, DataState<T>> {
-  SingleDataViewModelProvider(super.create);
+T _createProvider<T>(
+  CreateProviderCallback<T> create,
+  BuildContext context,
+) {
+  return create(context, context.read<ServiceProvider>());
 }
 
-class MultiDataViewModelProvider<S extends MultiDataViewModel<T>, T>
-    extends StateNotifierProvider<S, DataState<List<T>>> {
-  MultiDataViewModelProvider(super.create);
+class SPProvider<T> extends Provider<T> {
+  SPProvider(
+    CreateProviderCallback<T> create, {
+    super.key,
+    super.child,
+  }) : super(create: (context) => _createProvider(create, context));
 }
 
-class SingleDataViewModelProviderFamily<S extends SingleDataViewModel<A>, A, B>
-    extends StateNotifierProviderFamily<S, DataState<A>, B> {
-  SingleDataViewModelProviderFamily(
-    FamilyCreate<S, StateNotifierProviderRef<S, DataState<A>>, B> create,
-  ) : super(create);
-}
-
-class MultiDataViewModelProviderFamily<S extends MultiDataViewModel<A>, A, B>
-    extends StateNotifierProviderFamily<S, DataState<List<A>>, B> {
-  MultiDataViewModelProviderFamily(
-    FamilyCreate<S, StateNotifierProviderRef<S, DataState<List<A>>>, B> create,
-  ) : super(create);
-}
-
-class SingleDataViewModelProviderWithModelValue<
-    S extends SingleDataViewModel<T>,
-    T> extends StateNotifierProviderFamily<S, DataState<T>, ModelValue<T>> {
-  SingleDataViewModelProviderWithModelValue(
-    FamilyCreate<S, StateNotifierProviderRef<S, DataState<T>>, ModelValue<T>>
-        create,
-  ) : super(create);
+class SPBlocProvider<T extends StateStreamableSource> extends BlocProvider<T> {
+  SPBlocProvider(
+    CreateProviderCallback<T> create, {
+    super.key,
+    super.child,
+  }) : super(create: (context) => _createProvider(create, context));
 }

@@ -5,7 +5,7 @@ import 'package:test_project/modules/post/presentation/presentation.dart';
 import 'package:test_project/modules/user/domain/domain.dart';
 import 'package:test_project/modules/user/presentation/presentation.dart';
 
-class UserPage extends StatelessWidget {
+class UserPage extends StatelessWidget with AutoRouteWrapper {
   const UserPage(
     @PathParam('userId') this.userId, {
     Key? key,
@@ -16,17 +16,23 @@ class UserPage extends StatelessWidget {
   final User? user;
 
   @override
-  Widget build(BuildContext context) {
-    final provider = userViewModelProvider(
-      ModelValue(
-        id: userId,
-        cachedModel: user,
-      ),
+  Widget wrappedRoute(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        UserViewModelProvider(
+          ModelValue(id: userId, cachedModel: user),
+        ),
+        AlbumListViewModelProvider(userId),
+        PostListViewModelProvider(userId),
+      ],
+      child: this,
     );
+  }
 
-    return UProviderBuilder<User>(
-      provider: provider,
-      builder: (state, ref) {
+  @override
+  Widget build(BuildContext context) {
+    return UDataStateViewModelBuilder<UserViewModel, User>(
+      builder: (context, state) {
         return UScaffold(
           backgroundColor: Colors.black,
           title: _getTitle(context, state),
@@ -119,48 +125,45 @@ class _UserInformation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Hero(
-      tag: 'userListPage',
-      child: UCard(
-        padding: EdgeInsets.zero,
-        child: Column(
-          children: [
-            ListTile(
-              leading: const UIconBox(FeatherIcons.mail),
-              title: Text(context.localization.email),
-              subtitle: Text(user.email),
+    return UCard(
+      padding: EdgeInsets.zero,
+      child: Column(
+        children: [
+          ListTile(
+            leading: const UIconBox(FeatherIcons.mail),
+            title: Text(context.localization.email),
+            subtitle: Text(user.email),
+          ),
+          ListTile(
+            leading: const UIconBox(FeatherIcons.phone),
+            title: Text(context.localization.phone),
+            subtitle: Text(user.phone),
+          ),
+          ListTile(
+            leading: const UIconBox(FeatherIcons.globe),
+            title: Text(context.localization.website),
+            subtitle: Text(user.website),
+            trailing: const Icon(FeatherIcons.chevronRight),
+            onTap: () => launchUrl(user.website),
+          ),
+          ListTile(
+            leading: const UIconBox(FeatherIcons.home),
+            title: Text(context.localization.company),
+            subtitle: Text(user.company.name),
+            trailing: const Icon(FeatherIcons.chevronRight),
+            onTap: () => UDialog.show(
+              context,
+              UCompanyInfoDialog(user.company),
             ),
-            ListTile(
-              leading: const UIconBox(FeatherIcons.phone),
-              title: Text(context.localization.phone),
-              subtitle: Text(user.phone),
-            ),
-            ListTile(
-              leading: const UIconBox(FeatherIcons.globe),
-              title: Text(context.localization.website),
-              subtitle: Text(user.website),
-              trailing: const Icon(FeatherIcons.chevronRight),
-              onTap: () => launchUrl(user.website),
-            ),
-            ListTile(
-              leading: const UIconBox(FeatherIcons.home),
-              title: Text(context.localization.company),
-              subtitle: Text(user.company.name),
-              trailing: const Icon(FeatherIcons.chevronRight),
-              onTap: () => UDialog.show(
-                context,
-                UCompanyInfoDialog(user.company),
-              ),
-            ),
-            ListTile(
-              leading: const UIconBox(FeatherIcons.mapPin),
-              title: Text(context.localization.address),
-              subtitle: Text(formatAddress(user.address)),
-              trailing: const Icon(FeatherIcons.map),
-              onTap: () => launchMapsUrl(user.address.geo),
-            ),
-          ],
-        ),
+          ),
+          ListTile(
+            leading: const UIconBox(FeatherIcons.mapPin),
+            title: Text(context.localization.address),
+            subtitle: Text(formatAddress(user.address)),
+            trailing: const Icon(FeatherIcons.map),
+            onTap: () => launchMapsUrl(user.address.geo),
+          ),
+        ],
       ),
     );
   }
@@ -176,32 +179,28 @@ class _UserAlbums extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Hero(
-      tag: "albumsPage",
-      child: UCard(
-        padding: EdgeInsets.zero,
-        child: UProvidedStateDecorator<List<Album>>(
-          provider: albumListViewModelProvider(user.id),
-          builder: (data, failure, ref) {
-            return Column(
-              children: [
-                ListTile(
-                  title: Text(context.localization.albums),
-                  trailing: const Icon(FeatherIcons.chevronRight),
-                  onTap: () =>
-                      context.navigateTo(AlbumListRoute(userId: user.id)),
-                ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.zero,
-                  itemBuilder: (_, index) => UAlbumListItem(data[index]),
-                  itemCount: data.length < 3 ? data.length : 3,
-                ),
-              ],
-            );
-          },
-        ),
+    return UCard(
+      padding: EdgeInsets.zero,
+      child: UWrappedStateDecorator<AlbumListViewModel, List<Album>>(
+        builder: (context, data, failure) {
+          return Column(
+            children: [
+              ListTile(
+                title: Text(context.localization.albums),
+                trailing: const Icon(FeatherIcons.chevronRight),
+                onTap: () =>
+                    context.navigateTo(AlbumListRoute(userId: user.id)),
+              ),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.zero,
+                itemBuilder: (_, index) => UAlbumListItem(data[index]),
+                itemCount: data.length < 3 ? data.length : 3,
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -217,32 +216,27 @@ class _UserPosts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Hero(
-      tag: "postsPage",
-      child: UCard(
-        padding: EdgeInsets.zero,
-        child: UProvidedStateDecorator<List<Post>>(
-          provider: postListViewModelProvider(user.id),
-          builder: (data, failure, ref) {
-            return Column(
-              children: [
-                ListTile(
-                  title: Text(context.localization.posts),
-                  trailing: const Icon(FeatherIcons.chevronRight),
-                  onTap: () =>
-                      context.navigateTo(PostListRoute(userId: user.id)),
-                ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.zero,
-                  itemBuilder: (_, index) => UPostListItem(data[index]),
-                  itemCount: data.length < 3 ? data.length : 3,
-                ),
-              ],
-            );
-          },
-        ),
+    return UCard(
+      padding: EdgeInsets.zero,
+      child: UWrappedStateDecorator<PostListViewModel, List<Post>>(
+        builder: (context, data, failure) {
+          return Column(
+            children: [
+              ListTile(
+                title: Text(context.localization.posts),
+                trailing: const Icon(FeatherIcons.chevronRight),
+                onTap: () => context.navigateTo(PostListRoute(userId: user.id)),
+              ),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.zero,
+                itemBuilder: (_, index) => UPostListItem(data[index]),
+                itemCount: data.length < 3 ? data.length : 3,
+              ),
+            ],
+          );
+        },
       ),
     );
   }

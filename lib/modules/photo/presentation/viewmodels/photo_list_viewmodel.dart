@@ -1,14 +1,18 @@
 import 'package:test_project/modules/photo/domain/domain.dart';
-import 'package:test_project/modules/photo/infrastructure/infrastructure.dart';
 import 'package:test_project/modules/photo/presentation/presentation.dart';
 
-final photoListViewModelProvider =
-    MultiDataViewModelProviderFamily<PhotoListViewModel, Photo, int>(
-  (ref, albumId) => PhotoListViewModel(
-    ref.read<PhotoRepository>(photoRepositoryProvider),
-    albumId,
-  ),
-);
+class PhotoListViewModelProvider extends SPBlocProvider<PhotoListViewModel> {
+  PhotoListViewModelProvider(
+    int albumId, {
+    super.key,
+    super.child,
+  }) : super(
+          (_, sp) => PhotoListViewModel(
+            sp.getRequired<PhotoRepository>(),
+            albumId,
+          ),
+        );
+}
 
 const Pagination _pagination = Pagination();
 

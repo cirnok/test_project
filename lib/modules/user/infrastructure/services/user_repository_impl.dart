@@ -1,12 +1,6 @@
 import 'package:test_project/modules/user/domain/domain.dart';
 import 'package:test_project/modules/user/infrastructure/infrastructure.dart';
 
-final userRepositoryProvider = Provider<UserRepository>(
-  (ref) => UserRepositoryImpl(
-    UserRestClient(ref.read<Dio>(dioProvider)),
-  ),
-);
-
 class UserRepositoryImpl implements UserRepository {
   UserRepositoryImpl(this._client);
   final UserRestClient _client;

@@ -1,7 +1,7 @@
 import 'package:test_project/modules/photo/domain/domain.dart';
 import 'package:test_project/modules/photo/presentation/presentation.dart';
 
-class AlbumListPage extends StatelessWidget {
+class AlbumListPage extends StatelessWidget with AutoRouteWrapper {
   const AlbumListPage(
     @PathParam('userId') this.userId, {
     Key? key,
@@ -10,17 +10,21 @@ class AlbumListPage extends StatelessWidget {
   final int userId;
 
   @override
-  Widget build(BuildContext context) {
-    final provider = albumListViewModelProvider(userId);
+  Widget wrappedRoute(BuildContext context) {
+    return AlbumListViewModelProvider(
+      userId,
+      child: this,
+    );
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return UScaffold(
-      heroTag: 'albumsPage',
       title: context.localization.albums,
-      body: UProvidedStateDecorator<List<Album>>(
-        provider: provider,
-        builder: (data, failure, ref) {
+      body: UWrappedStateDecorator<AlbumListViewModel, List<Album>>(
+        builder: (_, data, failure) {
           return UPaginateListener(
-            onFetchRequest: () => ref.read(provider.notifier).loadMore(),
+            onFetchRequest: () => context.read<AlbumListViewModel>().loadMore(),
             child: ListView.builder(
               padding: EdgeInsets.only(bottom: context.viewPadding.bottom),
               itemBuilder: (_, index) => UAlbumListItem(data[index]),

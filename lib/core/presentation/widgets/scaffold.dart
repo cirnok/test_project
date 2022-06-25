@@ -7,14 +7,12 @@ class UScaffold extends StatelessWidget {
     this.backgroundColor = Colors.white,
     this.floatingActionButton,
     required this.body,
-    this.heroTag,
   }) : super(key: key);
 
   final String title;
   final Color backgroundColor;
   final Widget? floatingActionButton;
   final Widget body;
-  final String? heroTag;
 
   @override
   Widget build(BuildContext context) {
@@ -36,79 +34,14 @@ class UScaffold extends StatelessWidget {
         bottom: false,
         child: Container(
           color: Colors.black,
-          child: heroTag != null
-              ? Hero(
-                  tag: heroTag!,
-                  flightShuttleBuilder: _customFlightShuttleBuilder,
-                  child: UCard(
-                    color: backgroundColor,
-                    padding: EdgeInsets.zero,
-                    borderRadius: DesignConstants.borderRadiusOnlyTop,
-                    child: body,
-                  ),
-                )
-              : UCard(
-                  color: backgroundColor,
-                  padding: EdgeInsets.zero,
-                  borderRadius: DesignConstants.borderRadiusOnlyTop,
-                  child: body,
-                ),
+          child: UCard(
+            color: backgroundColor,
+            padding: EdgeInsets.zero,
+            borderRadius: DesignConstants.borderRadiusOnlyTop,
+            child: body,
+          ),
         ),
       ),
     );
-  }
-
-  // ignore: long-parameter-list
-  Widget _customFlightShuttleBuilder(
-    _,
-    animation,
-    flightDirection,
-    fromHeroContext,
-    toHeroContext,
-  ) {
-    {
-      final fromHero = fromHeroContext.widget as Hero;
-      final toHero = toHeroContext.widget as Hero;
-
-      return UCard(
-        padding: EdgeInsets.zero,
-        child: Stack(
-          children: [
-            FadeTransition(
-              opacity: animation.drive(
-                Tween<double>(begin: 0.0, end: 1.0).chain(
-                  CurveTween(
-                    curve: const Interval(
-                      0.9,
-                      1,
-                    ),
-                  ),
-                ),
-              ),
-              // ignore: avoid-nested-conditional-expressions
-              child: flightDirection == HeroFlightDirection.push
-                  ? toHero.child
-                  : fromHero.child,
-            ),
-            FadeTransition(
-              opacity: animation.drive(
-                Tween<double>(begin: 1.0, end: 0.0).chain(
-                  CurveTween(
-                    curve: const Interval(
-                      0,
-                      0.1,
-                    ),
-                  ),
-                ),
-              ),
-              // ignore: avoid-nested-conditional-expressions
-              child: flightDirection != HeroFlightDirection.push
-                  ? toHero.child
-                  : fromHero.child,
-            ),
-          ],
-        ),
-      );
-    }
   }
 }

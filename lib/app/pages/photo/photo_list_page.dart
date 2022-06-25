@@ -1,7 +1,7 @@
 import 'package:test_project/modules/photo/domain/domain.dart';
 import 'package:test_project/modules/photo/presentation/presentation.dart';
 
-class PhotoPage extends ConsumerWidget {
+class PhotoPage extends StatelessWidget with AutoRouteWrapper {
   const PhotoPage(
     @PathParam('albumId') this.albumId, {
     Key? key,
@@ -14,15 +14,20 @@ class PhotoPage extends ConsumerWidget {
   final int? initialIndex;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final provider = photoListViewModelProvider(albumId);
+  Widget wrappedRoute(BuildContext context) {
+    return PhotoListViewModelProvider(
+      albumId,
+      child: this,
+    );
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return UScaffold(
       backgroundColor: Colors.black,
       title: context.localization.photo,
-      body: UProvidedStateDecorator<List<Photo>>(
-        provider: provider,
-        builder: (data, _, __) => PhotoContent(
+      body: UWrappedStateDecorator<PhotoListViewModel, List<Photo>>(
+        builder: (_, data, __) => PhotoContent(
           data,
           initialIndex,
         ),
@@ -32,7 +37,7 @@ class PhotoPage extends ConsumerWidget {
 }
 
 @visibleForTesting
-class PhotoContent extends ConsumerStatefulWidget {
+class PhotoContent extends StatefulWidget {
   const PhotoContent(
     this.photos,
     this.initialIndex, {
@@ -43,10 +48,10 @@ class PhotoContent extends ConsumerStatefulWidget {
   final int? initialIndex;
 
   @override
-  ConsumerState<PhotoContent> createState() => _PhotoContentState();
+  State<PhotoContent> createState() => _PhotoContentState();
 }
 
-class _PhotoContentState extends ConsumerState<PhotoContent> {
+class _PhotoContentState extends State<PhotoContent> {
   late int index;
   late PageController pageController;
 

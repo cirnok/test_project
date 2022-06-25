@@ -1,11 +1,6 @@
 import 'package:test_project/modules/photo/domain/domain.dart';
 import 'package:test_project/modules/photo/infrastructure/infrastructure.dart';
 
-final albumRepositoryProvider = Provider<AlbumRepository>(
-  (ref) => AlbumRepositoryImpl(
-    AlbumRestClient(ref.read<Dio>(dioProvider)),
-  ),
-);
 
 class AlbumRepositoryImpl implements AlbumRepository {
   AlbumRepositoryImpl(this._client);

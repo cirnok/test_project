@@ -1,12 +1,6 @@
 import 'package:test_project/modules/post/domain/domain.dart';
 import 'package:test_project/modules/post/infrastructure/infrastructure.dart';
 
-final postRepositoryProvider = Provider<PostRepository>(
-  (ref) => PostRepositoryImpl(
-    PostRestClient(ref.read<Dio>(dioProvider)),
-  ),
-);
-
 class PostRepositoryImpl implements PostRepository {
   PostRepositoryImpl(this._client);
   final PostRestClient _client;
